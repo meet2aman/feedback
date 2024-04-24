@@ -3,16 +3,72 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
+import React, { useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import { IoLogoGoogle } from "react-icons/io5";
 import { useToast } from "@/components/ui/use-toast";
-export default function SignInPage() {
-  const { toast } = useToast();
+import { useRouter } from "next/navigation";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signInSchema } from "@/schemas/signInSchema";
+import { useForm } from "react-hook-form";
 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
+
+export default function SignInPage() {
+  const router = useRouter();
+  const { toast } = useToast();
   const { data: session } = useSession();
   console.log(session);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [showPassword, setSetShowPassword] = React.useState(false);
+
+  /// zod impliments ///
+  const form = useForm({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      identifier: "",
+      password: "",
+    },
+  });
+
+  /////  handle on Submit form fn //////
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+    setIsSubmitting(true);
+    const result = await signIn("credentials", {
+      redirect: false,
+      identifier: data.identifier,
+      password: data.password,
+    });
+    if (result?.error) {
+      toast({
+        title: "Login Failed",
+        description: "Incorrect username or password",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+    }
+    if (result?.url) {
+      toast({
+        className: "py-4",
+        description: "Logged in successfully",
+      });
+      router.replace("/dashboard");
+      setIsSubmitting(false);
+    }
+    setIsSubmitting(false);
+  };
+
+  /////  handle on google fn //////
   const onGoogleClick = () => {
     toast({
       className: "py-3",
@@ -20,14 +76,20 @@ export default function SignInPage() {
     });
   };
 
+  /////  handle show password fn //////
+  const handleShowPassword = () => {
+    setSetShowPassword((prev) => !prev);
+  };
+
   if (session) {
     return (
       <>
-        Signed in as {session.user.email} <br />
+        Signed in as {session?.user?.email} <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     );
   }
+
   return (
     <div className="w-full flex flex-col items-center justify-between lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:mt-8">
       <div className="flex items-center justify-center py-12">
@@ -54,35 +116,111 @@ export default function SignInPage() {
               </Link>
             </div>
           </div>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email" className="text-white">
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password" className="text-white">
-                  Password
-                </Label>
-                <Link
-                  href="/forgot-password"
-                  className="ml-auto inline-block text-sm underline text-white"
+          <div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="grid gap-4"
+              >
+                {/* =========== Email input ============= */}
+                <div className="grid gap-2">
+                  <FormField
+                    name="identifier"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white/70">Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            className="bg-zinc-900 text-neutral-300 border-gray-700"
+                            type="email"
+                            placeholder="Email or Username"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                {/* =========== Password input ============= */}
+                <div className="grid gap-2">
+                  <FormField
+                    name="password"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center">
+                          <FormLabel className="text-white/70">
+                            Password
+                          </FormLabel>
+
+                          <Link
+                            href="/forgot-password"
+                            className="ml-auto inline-block text-sm underline text-white/70 border-none hover:text-white transition-all"
+                          >
+                            Forgot your password?
+                          </Link>
+                        </div>
+                        <div className="grid grid-cols-6 gap-2 justify-center items-center">
+                          <FormControl>
+                            <Input
+                              className="col-span-5 bg-zinc-900 text-neutral-300 border-gray-700"
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Enter your password"
+                              {...field}
+                            />
+                          </FormControl>
+                          <div className="col-span-1 cursor-pointer h-full w-full">
+                            {showPassword ? (
+                              <>
+                                <div
+                                  className="btn"
+                                  onClick={handleShowPassword}
+                                >
+                                  <EyeOff className="text-white" />
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div
+                                  className="btn"
+                                  onClick={handleShowPassword}
+                                >
+                                  <EyeIcon className="text-white" />
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* =========== Button ============= */}
+
+                <Button
+                  disabled={isSubmitting}
+                  type="submit"
+                  className="w-full"
                 >
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input id="password" type="password" required />
-            </div>
-            <Button type="submit" className="w-full">
-              Login
-            </Button>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                      wait ...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
+                </Button>
+              </form>
+            </Form>
+
+            {/* =========== divider ============= */}
+
             <div className="mb-6 mt-6 flex items-center justify-center">
               <div
                 aria-hidden="true"
@@ -100,6 +238,7 @@ export default function SignInPage() {
                 role="separator"
               />
             </div>
+
             <Button
               className="w-full bg-white/80 text-black transition-all hover:bg-white"
               onClick={onGoogleClick}

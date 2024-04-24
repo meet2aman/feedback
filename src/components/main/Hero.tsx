@@ -25,7 +25,7 @@ const Hero = () => {
           {/* ================= right div  =============== */}
 
           <div className="flex flex-col justify-center items-center xl:items-start">
-            {/* ================= chi[] =============== */}
+            {/* ================= chip =============== */}
 
             <div className="flex items-center justify-center md:inline-flex">
               <Link
@@ -70,7 +70,7 @@ const Hero = () => {
         </section>
         {/* ================= backed by bar =============== */}
 
-        <div className="flex justify-center items-center tracking-wide text-gray-300 p-4">
+        <div className="flex justify-center text-sm items-center tracking-wide text-gray-300 p-4">
           Backed By{" "}
           <span className="bg-zinc-900/90 rounded-xl ml-2 px-3 py-1">
             Aman kushwaha

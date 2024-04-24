@@ -30,23 +30,33 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import Link from "next/link";
+import { verifySchema } from "@/schemas/verifySchema";
+import { useRouter } from "next/navigation";
 const FormSchema = z.object({
   pin: z.string().min(6, {
     message: "Your one-time password must be 6 characters.",
   }),
 });
 
-export default function Verify({ params }: any) {
+export default function Verify({
+  params,
+}: {
+  params: {
+    username: string;
+  };
+}) {
+  const router = useRouter();
+  const { toast } = useToast();
   const username = params.username;
   const { user }: any = useGlobal();
   const [verified, setVerified] = React.useState(false);
   const [error, setError] = React.useState("");
   console.log(verified);
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof verifySchema>>({
+    resolver: zodResolver(verifySchema),
     defaultValues: {
       pin: "",
     },
@@ -58,14 +68,17 @@ export default function Verify({ params }: any) {
         code: data.pin,
         username: username,
       });
-      console.log(response.data.message);
+
       toast({
+        className: "py-4",
         description: `${response.data.message}`,
       });
+
       if (response.data.success === true) {
         setVerified(true);
-      } else {
       }
+
+      router.replace(`/sign-in`);
     } catch (error: any) {
       console.error("Problem occurred while verifying the account", error);
       toast({

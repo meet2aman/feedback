@@ -23,7 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { CheckCheckIcon, EyeIcon, EyeOff, Loader2 } from "lucide-react";
+import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { IoLogoGoogle } from "react-icons/io";
 

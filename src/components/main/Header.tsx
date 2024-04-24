@@ -4,12 +4,14 @@ import { navLinks } from "@/constants/constants";
 import Link from "next/link";
 import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
-import { gsap } from "gsap";
 import { IoIosArrowForward } from "react-icons/io";
 import { motion } from "framer-motion";
-import { useAnimate, stagger } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+
 const Header = () => {
+  const pathname = usePathname();
+
   const [toggle, setToggle] = React.useState(false);
   const [isScrolling, setIsScrolling] = React.useState(false);
 
@@ -64,16 +66,25 @@ const Header = () => {
         {/* navlinks */}
         <div className="hidden lg:block">
           <ul className="flex items-center justify-center gap-8 tracking-wide">
-            {navLinks.map((items) => (
-              <li key={items.title}>
-                <Link
-                  href={items.url}
-                  className="text-[14px] text-neutral-400 hover:text-slate-200 transition-all"
-                >
-                  {items.title}
-                </Link>
-              </li>
-            ))}
+            {navLinks.map((items) => {
+              const isActive =
+                pathname === items.url || pathname.startsWith(`${items.url}/`);
+              return (
+                <li key={items.title}>
+                  <Link
+                    href={items.url}
+                    className={cn(
+                      `text-[14px] text-neutral-400 hover:text-slate-200 transition-all`,
+                      {
+                        "text-white": isActive,
+                      }
+                    )}
+                  >
+                    {items.title}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="block lg:hidden">
