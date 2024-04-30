@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Feedback",
   description:
     "Empower anonymity with our feedback webapp. Collect honest insights discreetly. Join us for transparent communication!",
+  icons: {
+    icon: "/feedback.svg",
+  },
 };
 
 export default function RootLayout({

@@ -10,7 +10,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema } from "@/schemas/signInSchema";
 import { useForm } from "react-hook-form";
 
 import {
@@ -21,48 +20,48 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { forgotPasswordSchema } from "@/schemas/forgotPasswordSchema";
+import axios from "axios";
 
-export default function SignInPage() {
+export default function ForgotPassword() {
   const router = useRouter();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [showPassword, setSetShowPassword] = React.useState(false);
 
   /// zod impliments ///
-  const form = useForm<z.infer<typeof signInSchema>>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<z.infer<typeof forgotPasswordSchema>>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
-      identifier: "",
-      password: "",
+      email: "",
     },
   });
 
   /////  handle on Submit form fn //////
-  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+  const onSubmit = async (data: z.infer<typeof forgotPasswordSchema>) => {
     setIsSubmitting(true);
-    const result = await signIn("credentials", {
-      redirect: false,
-      identifier: data.identifier,
-      password: data.password,
+    console.log(data.email);
+    const response = await axios.post("/api/forgot-password", {
+      email: data.email,
     });
-    console.log(result);
-    if (result?.error) {
-      toast({
-        title: "Login Failed",
-        description: "Incorrect username or password",
-        variant: "destructive",
-      });
-      setIsSubmitting(false);
-    }
-    if (result?.url) {
-      toast({
-        className: "py-4",
-        description: "Logged in successfully",
-      });
-      router.replace("/dashboard");
-      setIsSubmitting(false);
-    }
+
+    console.log(response);
+    // if (response?.error) {
+    //   toast({
+    //     title: "Login Failed",
+    //     description: "Incorrect username or password",
+    //     variant: "destructive",
+    //   });
+    //   setIsSubmitting(false);
+    // }
+    // if (response?.url) {
+    //   toast({
+    //     className: "py-4",
+    //     description: "Logged in successfully",
+    //   });
+
+    //   setIsSubmitting(false);
+    // }
     setIsSubmitting(false);
   };
 
@@ -72,11 +71,6 @@ export default function SignInPage() {
       className: "py-3",
       title: "Coming soon 😃",
     });
-  };
-
-  /////  handle show password fn //////
-  const handleShowPassword = () => {
-    setSetShowPassword((prev) => !prev);
   };
 
   return (
@@ -93,15 +87,15 @@ export default function SignInPage() {
               />
             </div>
             <h1 className="text-[1.2rem] font-semibold text-white tracking-wide font-poppins ">
-              Login to Feedback
+              Forgot password
             </h1>
             <div className="text-center text-md text-slate-400">
-              Don't have an account?{" "}
+              If you want to{" "}
               <Link
-                href="/sign-up"
+                href="/sign-in"
                 className="underline text-blue-500 hover:text-blue-700 transition-all"
               >
-                Sign up.
+                Login
               </Link>
             </div>
           </div>
@@ -111,79 +105,21 @@ export default function SignInPage() {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="grid gap-4"
               >
-                {/* =========== Email input ============= */}
+                {/* =========== Email or username input ============= */}
                 <div className="grid gap-2">
                   <FormField
-                    name="identifier"
+                    name="email"
                     control={form.control}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white/70">
-                          Email or Username
-                        </FormLabel>
+                        <FormLabel className="text-white/70">Email</FormLabel>
                         <FormControl>
                           <Input
                             className="bg-zinc-900 text-neutral-300 border-gray-700"
-                            placeholder="Email or Username"
+                            placeholder="Enter your registered email"
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                {/* =========== Password input ============= */}
-                <div className="grid gap-2">
-                  <FormField
-                    name="password"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem>
-                        <div className="flex items-center">
-                          <FormLabel className="text-white/70">
-                            Password
-                          </FormLabel>
-
-                          <Link
-                            href="/forgot-password"
-                            className="ml-auto inline-block text-sm underline text-white/70 border-none hover:text-white transition-all"
-                          >
-                            Forgot your password?
-                          </Link>
-                        </div>
-                        <div className="grid grid-cols-6 gap-2 justify-center items-center">
-                          <FormControl>
-                            <Input
-                              className="col-span-5 bg-zinc-900 text-neutral-300 border-gray-700"
-                              type={showPassword ? "text" : "password"}
-                              placeholder="Enter your password"
-                              {...field}
-                            />
-                          </FormControl>
-                          <div className="col-span-1 cursor-pointer h-full w-full">
-                            {showPassword ? (
-                              <>
-                                <div
-                                  className="btn"
-                                  onClick={handleShowPassword}
-                                >
-                                  <EyeOff className="text-white" />
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <div
-                                  className="btn"
-                                  onClick={handleShowPassword}
-                                >
-                                  <EyeIcon className="text-white" />
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-
                         <FormMessage />
                       </FormItem>
                     )}
@@ -203,7 +139,7 @@ export default function SignInPage() {
                       wait ...
                     </>
                   ) : (
-                    "Login"
+                    "Continue"
                   )}
                 </Button>
               </form>
@@ -239,7 +175,7 @@ export default function SignInPage() {
           </div>
         </div>
       </div>
-      <div className="bg-black w-full h-full flex items-center justify-center">
+      {/* <div className="bg-black w-full h-full flex items-center justify-center">
         <div className="bg-muted  w-full !bg-black flex items-center justify-center">
           <video
             autoPlay
@@ -253,7 +189,7 @@ export default function SignInPage() {
             width="300"
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

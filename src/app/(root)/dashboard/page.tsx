@@ -74,8 +74,8 @@ import {
 
 export default function Dashboard() {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+    <div className="flex min-h-screen w-full flex-col bg-muted/40 !bg-slate-900 text-white!">
+      <aside className="fixed inset-y-0 top-14 left-0 z-10 hidden w-14 flex-col border-r border-neutral-800 bg-background !bg-black sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
           <Link
             href="#"
@@ -243,7 +243,9 @@ export default function Dashboard() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Recent Orders</BreadcrumbPage>
+                <BreadcrumbPage className="text-white">
+                  Recent Orders
+                </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -252,7 +254,7 @@ export default function Dashboard() {
             <Input
               type="search"
               placeholder="Search..."
-              className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+              className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px] bg-black  border-neutral-800 text-neutral-300"
             />
           </div>
           <DropdownMenu>
@@ -263,7 +265,7 @@ export default function Dashboard() {
                 className="overflow-hidden rounded-full"
               >
                 <Image
-                  src="/placeholder-user.jpg"
+                  src="/download.png"
                   width={36}
                   height={36}
                   alt="Avatar"
@@ -284,7 +286,10 @@ export default function Dashboard() {
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
           <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-              <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
+              <Card
+                className="sm:col-span-2 bg-black text-white border-neutral-800"
+                x-chunk="dashboard-05-chunk-0"
+              >
                 <CardHeader className="pb-3">
                   <CardTitle>Your Orders</CardTitle>
                   <CardDescription className="max-w-lg text-balance leading-relaxed">
@@ -296,7 +301,10 @@ export default function Dashboard() {
                   <Button>Create New Order</Button>
                 </CardFooter>
               </Card>
-              <Card x-chunk="dashboard-05-chunk-1">
+              <Card
+                x-chunk="dashboard-05-chunk-1"
+                className="bg-black text-white border-neutral-800"
+              >
                 <CardHeader className="pb-2">
                   <CardDescription>This Week</CardDescription>
                   <CardTitle className="text-4xl">$1,329</CardTitle>
@@ -307,10 +315,17 @@ export default function Dashboard() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Progress value={25} aria-label="25% increase" />
+                  <Progress
+                    value={25}
+                    aria-label="25% increase"
+                    className="bg-white"
+                  />
                 </CardFooter>
               </Card>
-              <Card x-chunk="dashboard-05-chunk-2">
+              <Card
+                x-chunk="dashboard-05-chunk-2"
+                className="bg-black text-white border-neutral-800"
+              >
                 <CardHeader className="pb-2">
                   <CardDescription>This Month</CardDescription>
                   <CardTitle className="text-4xl">$5,329</CardTitle>
@@ -321,13 +336,17 @@ export default function Dashboard() {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Progress value={12} aria-label="12% increase" />
+                  <Progress
+                    value={12}
+                    aria-label="12% increase"
+                    className="bg-white"
+                  />
                 </CardFooter>
               </Card>
             </div>
             <Tabs defaultValue="week">
               <div className="flex items-center">
-                <TabsList>
+                <TabsList className="bg-black border border-neutral-800">
                   <TabsTrigger value="week">Week</TabsTrigger>
                   <TabsTrigger value="month">Month</TabsTrigger>
                   <TabsTrigger value="year">Year</TabsTrigger>
@@ -368,8 +387,11 @@ export default function Dashboard() {
                   </Button>
                 </div>
               </div>
-              <TabsContent value="week">
-                <Card x-chunk="dashboard-05-chunk-3">
+              <TabsContent value="week" className="bg-black">
+                <Card
+                  x-chunk="dashboard-05-chunk-3"
+                  className="bg-black text-white border-neutral-800 rounded-lg"
+                >
                   <CardHeader className="px-7">
                     <CardTitle>Orders</CardTitle>
                     <CardDescription>
@@ -377,7 +399,7 @@ export default function Dashboard() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Table>
+                    <Table className="bg-black text-white">
                       <TableHeader>
                         <TableRow>
                           <TableHead>Customer</TableHead>
@@ -395,7 +417,7 @@ export default function Dashboard() {
                       </TableHeader>
                       <TableBody>
                         <TableRow className="bg-accent">
-                          <TableCell>
+                          <TableCell className="hover:bg-neutral-900">
                             <div className="font-medium">Liam Johnson</div>
                             <div className="hidden text-sm text-muted-foreground md:inline">
                               liam@example.com
@@ -562,8 +584,11 @@ export default function Dashboard() {
             </Tabs>
           </div>
           <div>
-            <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
-              <CardHeader className="flex flex-row items-start bg-muted/50">
+            <Card
+              className="overflow-hidden bg-black text-white border-neutral-800"
+              x-chunk="dashboard-05-chunk-4"
+            >
+              <CardHeader className="flex flex-row items-start bg-muted/50 bg-black">
                 <div className="grid gap-0.5">
                   <CardTitle className="group flex items-center gap-2 text-lg">
                     Order Oe31b70H
@@ -579,16 +604,20 @@ export default function Dashboard() {
                   <CardDescription>Date: November 23, 2023</CardDescription>
                 </div>
                 <div className="ml-auto flex items-center gap-1">
-                  <Button size="sm" variant="outline" className="h-8 gap-1">
-                    <Truck className="h-3.5 w-3.5" />
-                    <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-8 gap-1 hover:bg-white/80 marker:"
+                  >
+                    <Truck className="h-3.5 w-3.5 text-black" />
+                    <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap text-black">
                       Track Order
                     </span>
                   </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button size="icon" variant="outline" className="h-8 w-8">
-                        <MoreVertical className="h-3.5 w-3.5" />
+                        <MoreVertical className="h-3.5 w-3.5 text-neutral-900" />
                         <span className="sr-only">More</span>
                       </Button>
                     </DropdownMenuTrigger>
@@ -691,7 +720,7 @@ export default function Dashboard() {
                   </dl>
                 </div>
               </CardContent>
-              <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
+              <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3 bg-black">
                 <div className="text-xs text-muted-foreground">
                   Updated <time dateTime="2023-11-23">November 23, 2023</time>
                 </div>
@@ -699,13 +728,13 @@ export default function Dashboard() {
                   <PaginationContent>
                     <PaginationItem>
                       <Button size="icon" variant="outline" className="h-6 w-6">
-                        <ChevronLeft className="h-3.5 w-3.5" />
+                        <ChevronLeft className="h-3.5 w-3.5 text-neutral-900" />
                         <span className="sr-only">Previous Order</span>
                       </Button>
                     </PaginationItem>
                     <PaginationItem>
                       <Button size="icon" variant="outline" className="h-6 w-6">
-                        <ChevronRight className="h-3.5 w-3.5" />
+                        <ChevronRight className="h-3.5  text-neutral-900" />
                         <span className="sr-only">Next Order</span>
                       </Button>
                     </PaginationItem>

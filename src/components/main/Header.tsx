@@ -8,12 +8,17 @@ import { IoIosArrowForward } from "react-icons/io";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { User } from "next-auth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Header = () => {
   const pathname = usePathname();
-
   const [toggle, setToggle] = React.useState(false);
   const [isScrolling, setIsScrolling] = React.useState(false);
+
+  const { data: session } = useSession();
+  const user: User = session?.user as User;
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -111,17 +116,43 @@ const Header = () => {
 
         {/* ============= functional buttons ============ */}
         <div className="hidden lg:flex gap-3">
-          <Link href={"/sign-in"}>
-            <button className="text-slate-300 text-[14px] hidden xl:block cursor-pointer px-5 py-2 rounded-full hover:bg-gray-600/50 font-500 tracking-wide">
-              Sign in
-            </button>
-          </Link>
-          <Link href={"/sign-up"}>
-            <div className="text-[15px] bg-white transition-all hover:bg-white/90 px-5 py-2 cursor-pointer rounded-full flex justify-center items-center gap-1 font-[500] group">
-              <button>Get Started</button>
-              <IoIosArrowForward className="text-gray-400 group-hover:text-black transition-all group-hover:translate-x-2" />
-            </div>
-          </Link>
+          {session ? (
+            <>
+              <button
+                onClick={() => signOut()}
+                className="text-slate-300 text-[14px] hidden xl:block cursor-pointer px-5 py-2 rounded-full hover:bg-gray-600/50 font-500 tracking-wide"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href={"/sign-in"}>
+                <button className="text-slate-300 text-[14px] hidden xl:block cursor-pointer px-5 py-2 rounded-full hover:bg-gray-600/50 font-500 tracking-wide">
+                  Sign in
+                </button>
+              </Link>
+            </>
+          )}
+          {session ? (
+            <>
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.pngs" />
+                <AvatarFallback className="uppercase">
+                  {user?.username?.slice(2)}
+                </AvatarFallback>
+              </Avatar>
+            </>
+          ) : (
+            <>
+              <Link href={"/sign-up"}>
+                <div className="text-[15px] bg-white transition-all hover:bg-white/90 px-5 py-2 cursor-pointer rounded-full flex justify-center items-center gap-1 font-[500] group">
+                  <button>Get Started</button>
+                  <IoIosArrowForward className="text-gray-400 group-hover:text-black transition-all group-hover:translate-x-2" />
+                </div>
+              </Link>
+            </>
+          )}
         </div>
       </motion.nav>
 

@@ -1,6 +1,15 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";
 
+export const metadata: Metadata = {
+  title: "Feedback",
+  description:
+    "Empower anonymity with our feedback webapp. Collect honest insights discreetly. Join us for transparent communication!",
+  icons: {
+    icon: "/feedback.svg",
+  },
+};
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main>
@@ -19,3 +28,4 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default AuthLayout;
+
