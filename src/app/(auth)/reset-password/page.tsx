@@ -45,31 +45,52 @@ export default function ResetPassword() {
 
   /////  handle on Submit form fn //////
   const onSubmit = async (data: z.infer<typeof resetPasswordSchema>) => {
-    setIsSubmitting(true);
-    console.log(data.password);
-    const response = await axios.post("/api/reset-password", {
-      token,
-      password: data.password,
-    });
+    try {
+      if (!data.password && !data.confirmPassword) {
+        toast({
+          className: "py-3",
+          description: "Please enter your password",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (data.password !== data.confirmPassword) {
+        toast({
+          className: "py-3",
+          description: "Passwords do not match",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    console.log(response);
-    // if (response?.error) {
-    //   toast({
-    //     title: "Login Failed",
-    //     description: "Incorrect username or password",
-    //     variant: "destructive",
-    //   });
-    //   setIsSubmitting(false);
-    // }
-    // if (response?.url) {
-    //   toast({
-    //     className: "py-4",
-    //     description: "Logged in successfully",
-    //   });
+      setIsSubmitting(true);
 
-    //   setIsSubmitting(false);
-    // }
-    setIsSubmitting(false);
+      const response = await axios.post("/api/reset-password", {
+        token,
+        password: data.password,
+      });
+      toast({
+        className: "py-3",
+        description: response.data.message,
+      });
+
+      if (response.status === 200) {
+        toast({
+          className: "py-3",
+          description: "Password updated Successfully!",
+        });
+
+        setIsSubmitting(false);
+      }
+      setIsSubmitting(false);
+      router.push("/sign-in");
+    } catch (error: any) {
+      toast({
+        className: "py-3",
+        description: "Password Updation Failed",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

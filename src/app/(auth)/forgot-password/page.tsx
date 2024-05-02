@@ -3,11 +3,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
-import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { IoLogoGoogle } from "react-icons/io5";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,9 +23,9 @@ import { forgotPasswordSchema } from "@/schemas/forgotPasswordSchema";
 import axios from "axios";
 
 export default function ForgotPassword() {
-  const router = useRouter();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
 
   /// zod impliments ///
   const form = useForm<z.infer<typeof forgotPasswordSchema>>({
@@ -40,29 +38,19 @@ export default function ForgotPassword() {
   /////  handle on Submit form fn //////
   const onSubmit = async (data: z.infer<typeof forgotPasswordSchema>) => {
     setIsSubmitting(true);
-    console.log(data.email);
+
     const response = await axios.post("/api/forgot-password", {
       email: data.email,
     });
 
-    console.log(response);
-    // if (response?.error) {
-    //   toast({
-    //     title: "Login Failed",
-    //     description: "Incorrect username or password",
-    //     variant: "destructive",
-    //   });
-    //   setIsSubmitting(false);
-    // }
-    // if (response?.url) {
-    //   toast({
-    //     className: "py-4",
-    //     description: "Logged in successfully",
-    //   });
+    toast({
+      className: "py-3",
+      title: "Password updatation Status",
+      description: response.data.message,
+    });
 
-    //   setIsSubmitting(false);
-    // }
     setIsSubmitting(false);
+    setIsSubmitted(true);
   };
 
   /////  handle on google fn //////
@@ -99,80 +87,88 @@ export default function ForgotPassword() {
               </Link>
             </div>
           </div>
-          <div>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="grid gap-4"
-              >
-                {/* =========== Email or username input ============= */}
-                <div className="grid gap-2">
-                  <FormField
-                    name="email"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-white/70">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            className="bg-zinc-900 text-neutral-300 border-gray-700"
-                            placeholder="Enter your registered email"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* =========== Button ============= */}
-
-                <Button
-                  disabled={isSubmitting}
-                  type="submit"
-                  className="w-full"
+          {isSubmitted ? (
+            <>
+              <p className="text-center text-md text-slate-400">
+                Check your Inbox whe have send a link to your email address.
+              </p>
+            </>
+          ) : (
+            <div>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="grid gap-4"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
-                      wait ...
-                    </>
-                  ) : (
-                    "Continue"
-                  )}
-                </Button>
-              </form>
-            </Form>
+                  {/* =========== Email or username input ============= */}
+                  <div className="grid gap-2">
+                    <FormField
+                      name="email"
+                      control={form.control}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-white/70">Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              className="bg-zinc-900 text-neutral-300 border-gray-700"
+                              placeholder="Enter your registered email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-            {/* =========== divider ============= */}
+                  {/* =========== Button ============= */}
 
-            <div className="mb-6 mt-6 flex items-center justify-center">
-              <div
-                aria-hidden="true"
-                className="h-px w-full bg-neutral-700"
-                data-orientation="horizontal"
-                role="separator"
-              />
-              <span className="mx-4 text-xs text-slate-11 font-normal text-white">
-                OR
-              </span>
-              <div
-                aria-hidden="true"
-                className="h-px w-full bg-neutral-700"
-                data-orientation="horizontal"
-                role="separator"
-              />
+                  <Button
+                    disabled={isSubmitting}
+                    type="submit"
+                    className="w-full"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                        wait ...
+                      </>
+                    ) : (
+                      "Continue"
+                    )}
+                  </Button>
+                </form>
+              </Form>
+
+              {/* =========== divider ============= */}
+
+              <div className="mb-6 mt-6 flex items-center justify-center">
+                <div
+                  aria-hidden="true"
+                  className="h-px w-full bg-neutral-700"
+                  data-orientation="horizontal"
+                  role="separator"
+                />
+                <span className="mx-4 text-xs text-slate-11 font-normal text-white">
+                  OR
+                </span>
+                <div
+                  aria-hidden="true"
+                  className="h-px w-full bg-neutral-700"
+                  data-orientation="horizontal"
+                  role="separator"
+                />
+              </div>
+
+              <Button
+                className="w-full bg-white/80 text-black transition-all hover:bg-white"
+                onClick={onGoogleClick}
+              >
+                <IoLogoGoogle className=" mr-2 text-lg" />
+                Login with Google
+              </Button>
             </div>
-
-            <Button
-              className="w-full bg-white/80 text-black transition-all hover:bg-white"
-              onClick={onGoogleClick}
-            >
-              <IoLogoGoogle className=" mr-2 text-lg" />
-              Login with Google
-            </Button>
-          </div>
+          )}
         </div>
       </div>
       {/* <div className="bg-black w-full h-full flex items-center justify-center">

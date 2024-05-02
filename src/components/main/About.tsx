@@ -7,9 +7,8 @@ const About = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   //@ts-ignore
   const hoverHero = hover3d(heroRef, {
-    x: 30,
+    x: 50,
     y: -40,
-    z: 30,
   });
   return (
     <div
@@ -20,7 +19,13 @@ const About = () => {
       }}
       className="w-full h-full flex justify-center"
     >
-      <Image src={"/download.png"} alt="logo" height={300} width={400} />
+      <Image
+        src={"/download.png"}
+        alt="logo"
+        height={400}
+        width={400}
+        className="h-[200px] w-[200px] md:w-[400px] md:h-[400px]"
+      />
     </div>
   );
 };

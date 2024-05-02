@@ -26,8 +26,8 @@ export interface User extends Document {
   verifyCodeExpiry: Date;
   isAcceptingMessage: boolean;
   messages: Message[];
-  forgotPasswordToken: string;
-  forgotPasswordTokenExpiry: Date;
+  forgotPasswordToken: string | undefined;
+  forgotPasswordTokenExpiry: Date | undefined;
 }
 
 const UserSchema: Schema<User> = new Schema(

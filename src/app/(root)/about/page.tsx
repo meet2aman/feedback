@@ -3,7 +3,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div>
+    <div className="max-w-full">
       <DotBackgroundDemo />
     </div>
   );

@@ -41,7 +41,7 @@ const Hero = () => {
 
             {/* ================= Heading =============== */}
 
-            <h1 className="text-[3rem] xl:text-[5rem] tracking-wide text-white/80 text-center leading-[80px] lg:leading-[80px] font-favorit font-[500] xl:text-start xl:font-[600] ">
+            <h1 className="text-[3rem] xl:text-[5rem] tracking-wide text-white/80 text-center leading-[50px] lg:leading-[80px] font-favorit font-[600] xl:text-start">
               Anonymous Feedback <br /> System
             </h1>
             <p className="my-5 text-gray-400 text-center text-md tracking-wide leading-6 xl:text-start">

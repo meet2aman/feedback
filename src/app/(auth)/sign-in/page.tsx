@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
+import axios from "axios";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -41,21 +42,12 @@ export default function SignInPage() {
   /////  handle on Submit form fn //////
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     setIsSubmitting(true);
-    const result = await signIn("credentials", {
-      redirect: false,
+    const response = await axios.post("/api/sign-in", {
       identifier: data.identifier,
       password: data.password,
     });
-    console.log(result);
-    if (result?.error) {
-      toast({
-        title: "Login Failed",
-        description: "Incorrect username or password",
-        variant: "destructive",
-      });
-      setIsSubmitting(false);
-    }
-    if (result?.url) {
+    console.log(response);
+    if (response.data.success === true) {
       toast({
         className: "py-4",
         description: "Logged in successfully",
@@ -63,6 +55,23 @@ export default function SignInPage() {
       router.replace("/dashboard");
       setIsSubmitting(false);
     }
+
+    if (response.data.success === false) {
+      toast({
+        title: "Login Failed",
+        description: "Incorrect username or password",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+    }
+    // if (result?.url) {
+    //   toast({
+    //     className: "py-4",
+    //     description: "Logged in successfully",
+    //   });
+    //   router.replace("/dashboard");
+    //   setIsSubmitting(false);
+    // }
     setIsSubmitting(false);
   };
 

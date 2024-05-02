@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-export default function hover3d(ref: any, { x = 0, y = 0, z = 0 }) {
+export default function hover3d(ref: any, { x = 0, y = 0 }) {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseMove = (e: any) => {
@@ -33,10 +33,9 @@ export default function hover3d(ref: any, { x = 0, y = 0, z = 0 }) {
   const { x: xCoord, y: yCoord } = coords;
   const xTransform = isHovering ? xCoord * x : 0;
   const yTransform = isHovering ? yCoord * y : 0;
-  const zTransform = isHovering ? z : 0;
 
-  const transform = `perspective(1000px) rotateX(${xTransform}deg) rotateY(${yTransform}deg) translateZ(${zTransform}px)`;
-  const transtion = isHovering ? `transform 0.3s ease-out` : "";
+  const transform = `perspective(1000px) translateX(${xTransform}px) translateY(${yTransform}px) `;
+  const transtion = isHovering ? `transform 0.3s ease-out` : "0.3s ease-out";
 
   return { transform, transtion };
 }
