@@ -1,7 +1,5 @@
-import Footer from "@/components/main/Footer";
-import Header from "@/components/main/Header";
-
 import { Metadata } from "next";
+import Header_1 from "@/components/main/Header_1";
 export const metadata: Metadata = {
   title: "Feedback",
   description:
@@ -13,9 +11,8 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main>
-      <Header />
+      <Header_1 />
       {children}
-      <Footer />
     </main>
   );
 };

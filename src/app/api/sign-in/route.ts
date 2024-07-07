@@ -16,19 +16,19 @@ export async function POST(request: NextRequest) {
       $or: [{ email: identifier }, { username: identifier }],
     });
     if (!user) {
-      return NextResponse.json(
-        { message: "User Does Not Exist", success: false },
-        { status: 400 }
-      );
+      return NextResponse.json({
+        message: "User Does Not Exist",
+        success: false,
+      });
     }
 
     ///check if password is correct
     const validatePassword = await bcryptjs.compare(password, user.password);
     if (!validatePassword) {
-      return NextResponse.json(
-        { error: "Password is incorrect", success: false },
-        { status: 400 }
-      );
+      return NextResponse.json({
+        message: "Password is incorrect",
+        success: false,
+      });
     }
     /////create token data
     const tokenData = {
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json(
       {
-        message: "Login Successfully",
+        message: "Logged in successfully",
         success: true,
       },
       {

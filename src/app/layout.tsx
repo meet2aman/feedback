@@ -7,7 +7,7 @@ import Header from "@/components/main/Header";
 import { Toaster } from "@/components/ui/toaster";
 import { GlobalProvider } from "@/context/GlobalProvider";
 const inter = Inter({ subsets: ["latin"] });
-
+import "./globals.scss";
 export const metadata: Metadata = {
   title: "Feedback",
   description:

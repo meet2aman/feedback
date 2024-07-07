@@ -7,6 +7,7 @@ const {
 } = require("tailwindcss/lib/util/flattenColorPalette");
 
 const config = {
+  mode: "jit",
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -24,6 +25,11 @@ const config = {
       },
     },
     extend: {
+       transitionDuration: {
+        '2000': '2000ms',
+        '3000': '3000ms',
+        '4000': '4000ms',
+      },
       fontFamily: {
         favorit: ["favorit", "sans-serif"],
       },
@@ -68,6 +74,31 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        blob: {
+          "0%, 100%": {
+            transform: "translate(0, 0) scale(1)",
+          },
+          "25%": {
+            transform: "translate(20px, -50px) scale(1.1)",
+          },
+          "50%": {
+            transform: "translate(0, 20px) scale(1)",
+          },
+          "75%": {
+            transform: "translate(-20px, -15px) scale(0.9)",
+          },
+        },
+        tilt: {
+          "0%, 50%, 100%": {
+            transform: "rotate(0deg)",
+          },
+          "25%": {
+            transform: "rotate(0.5deg)",
+          },
+          "75%": {
+            transform: "rotate(-0.5deg)",
+          },
+        },
         "caret-blink": {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
@@ -92,6 +123,8 @@ const config = {
         },
       },
       animation: {
+        blob: "blob 10s infinite",
+        tilt: "tilt 10s infinite linear",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         spotlight: "spotlight 2s ease .75s 1 forwards",

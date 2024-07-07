@@ -8,46 +8,20 @@ import { IoIosArrowForward } from "react-icons/io";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
-import { User } from "next-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MyMongoObject, useGlobal } from "@/context/GlobalProvider";
+import { useGlobal } from "@/context/GlobalProvider";
 import { useToast } from "../ui/use-toast";
 import axios from "axios";
 
-const Header = () => {
+const Header_1 = () => {
   const pathname = usePathname();
   const [toggle, setToggle] = React.useState(false);
-  const [isScrolling, setIsScrolling] = React.useState(false);
   const { toast } = useToast();
   const { user, setUser }: any = useGlobal();
 
   console.log(user);
-  React.useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-      if (scrollTop > 0) {
-        // Apply animation to show border bottom
-        setIsScrolling(true);
-        // gsap.to(".nav", { borderBottomWidth: "0.5px", duration: "0.1" });
-      } else {
-        // Apply animation to hide border bottom
-        // gsap.to(".nav", { borderBottomWidth: "0", duration: "0.1" });
-        setIsScrolling(false);
-      }
-    };
-
-    // Add scroll event listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Remove scroll event listener when component unmounts
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const handleSignOut = useCallback(async () => {
+  const handleSignOut = async () => {
     await axios.get("/api/sign-out");
     toast({
       className: "py-3",
@@ -55,7 +29,7 @@ const Header = () => {
     });
     setUser(undefined);
     window.location.reload();
-  }, []);
+  };
   return (
     <>
       <motion.nav
@@ -66,10 +40,7 @@ const Header = () => {
         }}
         style={{ backdropFilter: "blur(10px)" }}
         className={cn(
-          "flex z-50 sticky top-0 items-center md:bg-transparent justify-between px-[1.5rem] lg:px-[5.6rem] py-2 2xl:px-[6.6rem] 2xl:py-[0.86rem] bg-slate-900/20 nav",
-          {
-            "border-b-[0.2px] border-neutral-700": isScrolling,
-          }
+          "flex z-50 sticky top-0 items-center md:bg-transparent justify-between px-[1.5rem] lg:px-[5.6rem] py-2 2xl:px-[6.6rem] 2xl:py-[0.86rem] bg-slate-900/20 border-b-[0.2px] border-neutral-700"
         )}
       >
         {/* logo */}
@@ -245,4 +216,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Header_1;

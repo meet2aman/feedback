@@ -92,7 +92,7 @@ export default function Verify({
   }
 
   return (
-    <section className="flex justify-center items-center mt-20">
+    <section className="flex justify-center items-center my-40">
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle className="font-semibold text-3xl">

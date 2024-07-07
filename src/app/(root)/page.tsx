@@ -6,6 +6,8 @@ import { Spotlight } from "@/components/ui/Spotlight";
 import React, { useEffect } from "react";
 import { Experience } from "@/components/main/Experience";
 import { DotBackgroundDemo } from "@/components/ui/dotBackground";
+import Swiper from "@/components/sub/Swiper";
+import Collab from "@/components/main/Collab";
 
 export default function Home() {
   const { toast } = useToast();
@@ -29,6 +31,8 @@ export default function Home() {
       <main className="bg-black">
         <Spotlight className="hidden xl:block" />
         <Hero />
+        <Collab />
+        <Swiper />
         <DotBackgroundDemo />
       </main>
     </>

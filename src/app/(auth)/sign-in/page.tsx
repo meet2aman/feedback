@@ -2,8 +2,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
-import { signIn } from "next-auth/react";
+import React from "react";
 import Image from "next/image";
 import { IoLogoGoogle } from "react-icons/io5";
 import { useToast } from "@/components/ui/use-toast";
@@ -29,6 +28,7 @@ export default function SignInPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [showPassword, setSetShowPassword] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   /// zod impliments ///
   const form = useForm<z.infer<typeof signInSchema>>({
@@ -50,7 +50,7 @@ export default function SignInPage() {
     if (response.data.success === true) {
       toast({
         className: "py-4",
-        description: "Logged in successfully",
+        title: response.data.message,
       });
       router.replace("/dashboard");
       setIsSubmitting(false);
@@ -58,20 +58,12 @@ export default function SignInPage() {
 
     if (response.data.success === false) {
       toast({
-        title: "Login Failed",
-        description: "Incorrect username or password",
+        className: "py-3 !font-[400] text-white",
+        title: response.data.message,
         variant: "destructive",
       });
       setIsSubmitting(false);
     }
-    // if (result?.url) {
-    //   toast({
-    //     className: "py-4",
-    //     description: "Logged in successfully",
-    //   });
-    //   router.replace("/dashboard");
-    //   setIsSubmitting(false);
-    // }
     setIsSubmitting(false);
   };
 
