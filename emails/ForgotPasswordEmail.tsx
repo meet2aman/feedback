@@ -53,7 +53,7 @@ export default async function ForgotPasswordEmail({
           </Row>
           <Row>
             <Text>
-              Thank from Feedback. Please use the following Link to reset your
+              Thanks from Feedback. Please use the following Link to reset your
               password :{" "}
               <a
                 href={`${process.env.DOMAIN_NAME}/reset-password

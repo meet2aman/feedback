@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { setTimeout } from "timers";
 import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
 const ContactPage = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -36,12 +37,14 @@ const ContactPage = () => {
   const onSubmit = async (data: z.infer<typeof contactSchema>) => {
     setIsSubmitting(true);
     try {
-      console.log(
-        `Hii ${data.name} your message ( ${data.content} ) has been sent to ${data.email}`
-      );
+      const response = await axios.post("/api/contact-message", {
+        name: data.name,
+        content: data.content,
+        email: data.email,
+      });
       toast({
         className: "py-4 !text-[12px]",
-        title: `Hii ${data.name} your message ( ${data.content} ) has been sent to ${data.email}`,
+        title: `${response.data.message}`,
       });
       setIsSubmitting(false);
     } catch (error: any) {
