@@ -24,6 +24,7 @@ import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 const ContactPage = () => {
   const { toast } = useToast();
+
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const form = useForm<z.infer<typeof contactSchema>>({
     resolver: zodResolver(contactSchema),
@@ -33,7 +34,8 @@ const ContactPage = () => {
       content: "",
     },
   });
-  console.log("IsSubmitting", isSubmitting);
+  const { reset } = form;
+
   const onSubmit = async (data: z.infer<typeof contactSchema>) => {
     setIsSubmitting(true);
     try {
@@ -47,11 +49,13 @@ const ContactPage = () => {
         title: `${response.data.message}`,
       });
       setIsSubmitting(false);
+      reset();
     } catch (error: any) {
       setIsSubmitting(false);
       throw new error();
     } finally {
       setIsSubmitting(false);
+      reset()
     }
   };
   return (

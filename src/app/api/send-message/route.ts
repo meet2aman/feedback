@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       return Response.json(
         {
           success: false,
-          messgae: "User not found",
+          message: "User not found",
         },
         {
           status: 404,
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
       return Response.json(
         {
           success: false,
-          messgae: "User is not accepting the messages",
+          message: "User is not accepting the messages",
         },
         {
           status: 403,
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: true,
-        messgae: "Message sent successfully",
+        message: "Message sent successfully",
       },
       {
         status: 200,
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         success: false,
-        messgae: "Error adding messages",
+        message: "Error adding messages",
       },
       {
         status: 401,
