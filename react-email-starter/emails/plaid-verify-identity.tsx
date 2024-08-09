@@ -1,71 +1,57 @@
 import {
   Body,
   Container,
-  Font,
   Head,
   Heading,
   Html,
   Img,
   Link,
+  Row,
   Section,
   Text,
-  Row,
 } from "@react-email/components";
 import * as React from "react";
 
-interface VerificationEmailProps {
-  username: string;
-  otp: string;
+interface PlaidVerifyIdentityEmailProps {
+  validationCode?: string;
 }
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-export const VerificationEmail = ({
-  username,
-  otp,
-}: VerificationEmailProps) => (
+export const PlaidVerifyIdentityEmail = ({
+  validationCode,
+}: PlaidVerifyIdentityEmailProps) => (
   <Html>
-    <Head>
-      <title>Verification Code</title>
-      <Font
-        fontFamily="Roboto"
-        fallbackFontFamily="Verdana"
-        webFont={{
-          url: "https://fonts.gstatic.com/s/roboto/v27/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2",
-          format: "woff2",
-        }}
-        fontWeight={400}
-        fontStyle="normal"
-      />
-    </Head>
+    <Head />
     <Body style={main}>
       <Container style={container}>
         <Img
           src={`${baseUrl}/static/logo.png`}
           width="88"
           height="88"
-          alt="feedback"
+          alt="Plaid"
           style={logo}
+          className="rounded-lg"
         />
         <Text style={tertiary}>Verify Your Identity</Text>
         <Row>
           <Heading as="h2" style={heading}>
-            Hello {username},
+            Hello {"username"},
           </Heading>
         </Row>
         <Heading style={secondary}>
           Enter the following code to finish Feedback verification.
         </Heading>
         <Section style={codeContainer}>
-          <Text style={code}>{otp}</Text>
+          <Text style={code}>{validationCode}</Text>
         </Section>
         <Text style={paragraph}>Not expecting this email?</Text>
         <Text style={paragraph}>
           Contact{" "}
-          <Link href="localhost:3000/sign-in" style={link}>
-            login@feedback.com
+          <Link href="mailto:login@plaid.com" style={link}>
+            login@plaid.com
           </Link>{" "}
           if you did not request this code.
         </Text>
@@ -75,12 +61,11 @@ export const VerificationEmail = ({
   </Html>
 );
 
-VerificationEmail.PreviewProps = {
-  username: "",
-  otp: "",
-} as VerificationEmailProps;
+PlaidVerifyIdentityEmail.PreviewProps = {
+  validationCode: "144833",
+} as PlaidVerifyIdentityEmailProps;
 
-export default VerificationEmail;
+export default PlaidVerifyIdentityEmail;
 
 const main = {
   backgroundColor: "#ffffff",
@@ -100,6 +85,12 @@ const container = {
 
 const logo = {
   margin: "0 auto",
+  backgroundColor: "#000",
+  borderRadius: "5px",
+};
+
+const heading = {
+  textAlign: "center" as const,
 };
 
 const tertiary = {
@@ -177,8 +168,4 @@ const footer = {
   fontFamily: "HelveticaNeue,Helvetica,Arial,sans-serif",
   textAlign: "center" as const,
   textTransform: "uppercase" as const,
-};
-
-const heading = {
-  textAlign: "center" as const,
 };

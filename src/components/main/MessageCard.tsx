@@ -4,9 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   AlertDialog,
@@ -21,44 +18,53 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
-import { Message } from "@/models/User";
+import { Message, User } from "@/models/User";
 import { useToast } from "../ui/use-toast";
 import axios from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
+import { dateConverter } from "@/utils/cn";
 
 type MessageCardProps = {
+  user: User;
   message: Message;
   onMessageDelete: (messageId: string) => void;
 };
 
-const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
+const MessageCard = ({ user, message, onMessageDelete }: MessageCardProps) => {
   const { toast } = useToast();
 
   const handleDeleteConfirm = async () => {
-    const response = await axios.delete<ApiResponse>(
-      `/api/delete-message/${message?._id}`
-    );
+    const response = await axios.delete<ApiResponse>(`/api/delete-message`, {
+      data: {
+        messageId: message._id,
+        userId: user._id,
+      },
+    });
     toast({
       title: response.data.message,
     });
     onMessageDelete(message._id);
   };
+  const date = dateConverter(message.createdAt);
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Card Title</CardTitle>
+      <CardContent className="p-6">
+        <p className="text-md">{message.content}</p>
+        <CardDescription>{date}</CardDescription>
         <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive">
-              <X className="w-5 h-5" />
+          <AlertDialogTrigger asChild className="mt-5">
+            <Button variant="destructive" className="text-sm !py-2">
+              Delete
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="mt-8">
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                This will permanently
+                <span className="line-through mx-1 text-[#ef4444]">delete</span>
+                your message from our database.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -69,10 +75,6 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <CardDescription>Card Description</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
       </CardContent>
     </Card>
   );

@@ -11,7 +11,6 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { Loader2, RefreshCcw } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useCallback, useEffect, useState } from "react";
@@ -22,9 +21,10 @@ export default function Dashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
-  const { user, setUser }: any = useGlobal();
+  const { user }: any = useGlobal();
   const { toast } = useToast();
   const router = useRouter();
+  console.log(messages);
 
   /* ============= Delete message function ============ */
   const handleDeleteMessage = (messageId: string) => {
@@ -44,7 +44,9 @@ export default function Dashboard() {
   const fetchAcceptMessages = useCallback(async () => {
     setIsSwitchLoading(true);
     try {
-      const response = await axios.get<ApiResponse>("/api/accept-messages");
+      const response = await axios.post(`/api/fetch-accept-message`, {
+        userId: user._id,
+      });
       setValue("acceptMessages", response.data.isAcceptingMessage);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
@@ -67,7 +69,10 @@ export default function Dashboard() {
       setIsLoading(true);
       setIsSwitchLoading(false);
       try {
-        const response = await axios.get<ApiResponse>("/api/get-messages");
+        const response = await axios.post<ApiResponse>("/api/get-messages", {
+          userId: user._id,
+        });
+        console.log("response :: ", response.data.messages);
         setMessages(response?.data?.messages || []);
         if (refresh) {
           toast({
@@ -82,8 +87,7 @@ export default function Dashboard() {
           className: "py-3",
           title: "Error",
           description:
-            axiosError.response?.data.message ||
-            "Failed to Fetch message status",
+            axiosError.response?.data.message || "Failed to Fetch messages",
           variant: "destructive",
         });
       } finally {
@@ -99,6 +103,7 @@ export default function Dashboard() {
     try {
       const response = await axios.post<ApiResponse>("/api/accept-messages", {
         acceptMessages: !acceptMessages,
+        userId: user._id,
       });
       setValue("acceptMessages", !acceptMessages);
       toast({
@@ -142,7 +147,6 @@ export default function Dashboard() {
     return (
       <>
         <div className="text-white font-semibold tracking-wide text-xl text-center">
-         
           <Glitch />
         </div>
       </>
@@ -220,6 +224,7 @@ export default function Dashboard() {
                   key={message._id}
                   message={message}
                   onMessageDelete={handleDeleteMessage}
+                  user={user}
                 />
               ))
             ) : (

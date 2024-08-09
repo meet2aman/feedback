@@ -2,13 +2,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import dbConnect from "@/db/dbConfig";
 import UserModel from "@/models/User";
-import { User } from "next-auth";
 import mongoose from "mongoose";
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   await dbConnect();
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
-  if (!session || !session.user) {
+  // const { userId } = await request.json();
+  // console.log(userId);
+  const userId = "66b64631a9f1588f613b7eac";
+
+  if (!userId) {
     return Response.json(
       {
         success: false,
@@ -19,12 +20,13 @@ export async function GET(request: Request) {
       }
     );
   }
-  const userId = new mongoose.Types.ObjectId(user?._id);
+  const parsedUserId = new mongoose.Types.ObjectId(userId);
+  console.log(parsedUserId);
   try {
     const user = await UserModel.aggregate([
       {
         $match: {
-          id: userId,
+          _id: parsedUserId,
         },
       },
       {
@@ -40,6 +42,7 @@ export async function GET(request: Request) {
         },
       },
     ]);
+
     if (!user || user.length === 0) {
       return Response.json(
         {
@@ -54,7 +57,7 @@ export async function GET(request: Request) {
     return Response.json(
       {
         success: true,
-        messgaes: user[0].messages,
+        messages: user[0].messages,
       },
       {
         status: 200,

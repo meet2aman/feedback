@@ -8,10 +8,8 @@ import { IoIosArrowForward } from "react-icons/io";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
-import { User } from "next-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MyMongoObject, useGlobal } from "@/context/GlobalProvider";
+import { useGlobal } from "@/context/GlobalProvider";
 import { useToast } from "../ui/use-toast";
 import axios from "axios";
 
@@ -56,6 +54,7 @@ const Header = () => {
     setUser(undefined);
     window.location.reload();
   }, []);
+
   return (
     <>
       <motion.nav
@@ -73,6 +72,7 @@ const Header = () => {
         )}
       >
         {/* logo */}
+
         <div>
           <Link href={"/"}>
             <h2 className="text-[1.3rem] md:text-[1.3rem] text-white font-semibold leading-none">
@@ -80,7 +80,9 @@ const Header = () => {
             </h2>
           </Link>
         </div>
+
         {/* navlinks */}
+
         <div className="hidden lg:block">
           <ul className="flex items-center justify-center gap-8 tracking-wide">
             {navLinks.map((items) => {
@@ -104,6 +106,9 @@ const Header = () => {
             })}
           </ul>
         </div>
+
+        {/* ============= Smaller devices hemburger menu ============ */}
+
         <div className="block lg:hidden">
           {toggle ? (
             <>
@@ -126,13 +131,15 @@ const Header = () => {
           )}
         </div>
 
+        {/* ============= medium device dropdown-menu ============ */}
+
         {/* ============= functional buttons ============ */}
         <div className="hidden lg:flex gap-3">
           {user._id ? (
             <>
               <button
                 onClick={handleSignOut}
-                className="text-white text-[14px] hidden xl:block cursor-pointer px-5 py-2 rounded-full bg-red-600/70 hover:bg-red-500/50 font-500 tracking-wide"
+                className="text-white text-[14px] hidden lg:block cursor-pointer px-5 py-2 rounded-full bg-[#ef4444] hover:bg-red-500/50 transition-all font-500 tracking-wide"
               >
                 Sign Out
               </button>
@@ -177,7 +184,7 @@ const Header = () => {
 
       {toggle && (
         <>
-          <motion.div className="lg:hidden px-7 py-3 flex flex-col gap-4 absolute w-full bg-black transition-all z-50">
+          <motion.div className="lg:hidden px-7 py-3 flex flex-col gap-4 absolute w-full bg-black transition-all z-50 h-full">
             <motion.div
               initial={{ opacity: 0, height: 0 }} // Initial state with opacity 0 and height 0
               animate={{ opacity: 1, height: "auto" }}
@@ -188,7 +195,7 @@ const Header = () => {
                 <>
                   <button
                     onClick={handleSignOut}
-                    className="px-10 bg-gray-900/50 py-3 text-xl text-center w-full rounded-lg text-slate-300 border border-gray-600 font-[500]"
+                    className="px-10 bg-[#ef4444] hover:bg-red-500/50 transition-all py-3 text-xl text-center w-full rounded-lg text-white border border-gray-600 font-[500]"
                   >
                     Sign Out
                   </button>
