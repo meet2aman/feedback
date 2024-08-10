@@ -16,6 +16,7 @@ import React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Glitch from "@/components/sub/Glitch";
+import VerifyModal from "@/components/main/VerifyModal";
 export default function Dashboard() {
   /* ============= useState hooks ============ */
   const [messages, setMessages] = useState<Message[]>([]);
@@ -28,7 +29,8 @@ export default function Dashboard() {
 
   /* ============= Delete message function ============ */
   const handleDeleteMessage = (messageId: string) => {
-    setMessages(messages.filter((message) => message.id !== messageId));
+    console.log("messageId", messageId);
+    setMessages(messages.filter((message) => message._id !== messageId));
   };
 
   /* ============= zod implimentation ============ */
@@ -156,16 +158,31 @@ export default function Dashboard() {
   /* ============= if logged IN ============ */
   return (
     <>
-      <main className="flex justify-center items-start gap-5 px-8">
+      <main className="flex justify-center items-start gap-5 px-8 py-5">
         <div className=" hidden lg:flex lg:fixed top-0 left-0 items-center justify-center h-screen border-r-[0.7px] border-neutral-800 w-[10%]">
           <span className="text-[4rem] bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 uppercase tracking-widest font-black whitespace-nowrap -rotate-90 text-center">
             DashBoard
           </span>
         </div>
         <div className="mt-2 bg-neutral-200 rounded max-w-6xl w-full lg:ml-[6.7rem] p-6 overflow-auto">
-          <h1 className="text-4xl font-bold mb-4 capitalize">
-            {user.username}&apos;s Dashboard
-          </h1>
+          <div className="flex justify-between">
+            <h1 className="text-4xl font-bold mb-4 capitalize">
+              {user.username}&apos;s Dashboard
+            </h1>
+            {user?.isVerified === false ? (
+              <VerifyModal userName={user.username} />
+            ) : (
+              <div className="relative">
+                <Button onClick={() => {}} disabled>
+                  Verified
+                </Button>
+                <span className="absolute flex h-3 w-3 top-0 left-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 -top-1 -left-1"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 -top-1 -left-1"></span>
+                </span>
+              </div>
+            )}
+          </div>
 
           <div className="mb-4">
             <h2 className="text-lg font-semibold mb-2">

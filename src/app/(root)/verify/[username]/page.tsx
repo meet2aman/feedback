@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Mail, Router } from "lucide-react";
+import { Mail } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -19,7 +19,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -34,7 +33,7 @@ import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
 import Link from "next/link";
 import { verifySchema } from "@/schemas/verifySchema";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 const FormSchema = z.object({
   pin: z.string().min(6, {
     message: "Your one-time password must be 6 characters.",
@@ -49,11 +48,14 @@ export default function Verify({
   };
 }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchContext = searchParams.get("context");
+  console.log(searchContext);
   const { toast } = useToast();
   const username = params.username;
   const { user }: any = useGlobal();
   const [verified, setVerified] = React.useState(false);
-  const [error, setError] = React.useState("");
+
   console.log(verified);
   const form = useForm<z.infer<typeof verifySchema>>({
     resolver: zodResolver(verifySchema),
@@ -61,6 +63,7 @@ export default function Verify({
       pin: "",
     },
   });
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       console.log(data);
@@ -78,16 +81,16 @@ export default function Verify({
         setVerified(true);
       }
 
-      router.replace(`/sign-in`);
+      if (searchContext === "signup") {
+        router.replace(`/sign-in`);
+      }
+      if (searchContext === "dashboard") router.replace(`/dashboard`);
     } catch (error: any) {
-      console.error("Problem occurred while verifying the account", error);
       toast({
         variant: "destructive",
-        description: "Problem occurred while verifying the account",
+        description: `${error.response.data.message}`,
       });
-      setError(
-        "An error occurred while verifying the account. Please try again later."
-      );
+      form.reset({ pin: "" });
     }
   }
 

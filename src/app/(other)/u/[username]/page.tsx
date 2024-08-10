@@ -13,7 +13,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/components/ui/use-toast";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { messageSchema } from "@/schemas/messageSchema";
@@ -31,6 +30,7 @@ const MessagePage = ({
   const { toast } = useToast();
   const { user, setUser }: any = useGlobal();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [response, setResponse] = React.useState("");
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
@@ -45,23 +45,23 @@ const MessagePage = ({
         username: user.username,
         content: data.content,
       });
+      console.log("response", response);
+      setResponse(response.data.message);
 
-      if (response.status === 200) {
-        toast({
-          className: "py-4 !text-[12px]",
-          title: `${response.data.message}`,
-        });
-      }
+      toast({
+        className: "py-4 !text-[12px]",
+        title: `${response.data.message}`,
+      });
 
       setIsSubmitting(false);
     } catch (error: any) {
       toast({
         variant: "destructive",
         className: "py-4",
-        description: `Error sending message.`,
+        description: `${response}`,
       });
       setIsSubmitting(false);
-      throw new error();
+      // throw error("Error sending message");
     } finally {
       setIsSubmitting(false);
     }

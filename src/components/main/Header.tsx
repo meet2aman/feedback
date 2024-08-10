@@ -135,7 +135,7 @@ const Header = () => {
 
         {/* ============= functional buttons ============ */}
         <div className="hidden lg:flex gap-3">
-          {user._id ? (
+          {user?._id ? (
             <>
               <button
                 onClick={handleSignOut}
@@ -153,7 +153,7 @@ const Header = () => {
               </Link>
             </>
           )}
-          {user._id ? (
+          {user?._id ? (
             <>
               <Link
                 href={`/u/${user.username}`}
@@ -191,7 +191,7 @@ const Header = () => {
               transition={{ duration: 0.5 }}
               className="w-full h-fit "
             >
-              {user._id ? (
+              {user?._id ? (
                 <>
                   <button
                     onClick={handleSignOut}
@@ -210,7 +210,7 @@ const Header = () => {
                 </>
               )}
             </motion.div>
-            {user._id ? (
+            {user?._id ? (
               <>
                 <div className="w-full h-fit ">
                   <button className="px-10 bg-white py-3 text-xl text-center w-full rounded-lg text-black border border-gray-800 font-[500] capitalize">

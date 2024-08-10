@@ -97,6 +97,11 @@ export default function SignUpPage() {
         } catch (error) {
           const axiosError = error as AxiosError<ApiResponse>;
           axiosError.response?.data.message ?? "Error checking username";
+          toast({
+            className: "py-4 font-semibold border-none tracking-wide",
+            variant: "destructive",
+            description: `Error while checking username `,
+          });
         } finally {
           setIsCheckingUsername(false);
         }
@@ -118,7 +123,7 @@ export default function SignUpPage() {
       const response = await axios.post("/api/sign-up", data);
       toast({
         value: "success",
-        description: "Signed up successfully",
+        description: `${response.data.message}`,
       });
       toast({
         description: "Verification email sent successfully",
@@ -126,21 +131,23 @@ export default function SignUpPage() {
       console.log("Signup success", response.data);
 
       setTimeout(() => {
-        router.replace(`/verify/${username}`);
+        router.replace(`/verify/${username}?context=signup`);
         setIsSubmitting(false);
       }, 3000);
     } catch (error: any) {
-      console.log("Signup failed", error.message);
-      const axiosError = error as AxiosError<ApiResponse>;
-      let errorMessage = axiosError.response?.data.message;
       toast({
         title: "Signup failed",
-        description: `Sign up Failed${errorMessage}`,
+        description: `${error.response.data.message}`,
         variant: "destructive",
       });
-      toast(error.message);
     } finally {
       setLoading(false);
+      setIsSubmitting(false);
+      form.reset({
+        username: "",
+        email: "",
+        password: "",
+      });
     }
   };
 
@@ -150,6 +157,7 @@ export default function SignUpPage() {
 
   const { user, setUser }: any = useGlobal();
   const { data: session } = useSession();
+
   if (session) {
     return (
       <>

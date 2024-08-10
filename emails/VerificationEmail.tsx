@@ -43,7 +43,7 @@ export const VerificationEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/static/logo.png`}
+          src={`/logo.png`}
           width="88"
           height="88"
           alt="feedback"

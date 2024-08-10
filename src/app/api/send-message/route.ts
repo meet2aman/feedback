@@ -14,7 +14,7 @@ export async function POST(request: Request) {
           message: "User not found",
         },
         {
-          status: 404,
+          status: 200,
         }
       );
     }
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
           message: "User is not accepting the messages",
         },
         {
-          status: 403,
+          status: 200,
         }
       );
     }
