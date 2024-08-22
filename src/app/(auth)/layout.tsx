@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main>
-      <div className="px-2 pt-8">
+      <div className="px-4 lg:px-6 pt-8">
         <Link
           className="text-white flex gap-3 justify-start items-center text-sm"
           href="/"
@@ -28,4 +28,3 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default AuthLayout;
-

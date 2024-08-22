@@ -26,6 +26,7 @@ import {
 import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { IoLogoGoogle } from "react-icons/io";
+import { IoLogoGithub } from "react-icons/io5";
 
 export default function SignUpPage() {
   const { toast } = useToast();
@@ -366,14 +367,22 @@ export default function SignUpPage() {
                   role="separator"
                 />
               </div>
-
-              <Button
-                className="w-full bg-white/80 text-black transition-all hover:bg-white"
-                onClick={onGoogleClick}
-              >
-                <IoLogoGoogle className=" mr-2 text-lg" />
-                Login with Google
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  className="w-full bg-white/80 text-black transition-all hover:bg-white"
+                  onClick={onGoogleClick}
+                >
+                  <IoLogoGoogle className=" mr-2 text-lg" />
+                  Login with Google
+                </Button>
+                <Button
+                  className="w-full bg-white/80 text-black transition-all hover:bg-white"
+                  onClick={onGoogleClick}
+                >
+                  <IoLogoGithub className=" mr-2 text-lg" />
+                  Login with Github
+                </Button>
+              </div>
             </div>
             <p className="text-white/70 text-xs tracking-wide">
               By signing up, you agree to our{" "}

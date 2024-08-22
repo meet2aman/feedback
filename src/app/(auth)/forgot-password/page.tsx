@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import Image from "next/image";
-import { IoLogoGoogle } from "react-icons/io5";
+import { IoLogoGithub, IoLogoGoogle } from "react-icons/io5";
 import { useToast } from "@/components/ui/use-toast";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -160,18 +160,27 @@ export default function ForgotPassword() {
                 />
               </div>
 
-              <Button
-                className="w-full bg-white/80 text-black transition-all hover:bg-white"
-                onClick={onGoogleClick}
-              >
-                <IoLogoGoogle className=" mr-2 text-lg" />
-                Login with Google
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  className="w-full bg-white/80 text-black transition-all hover:bg-white"
+                  onClick={onGoogleClick}
+                >
+                  <IoLogoGoogle className=" mr-2 text-lg" />
+                  Login with Google
+                </Button>
+                <Button
+                  className="w-full bg-white/80 text-black transition-all hover:bg-white"
+                  onClick={onGoogleClick}
+                >
+                  <IoLogoGithub className=" mr-2 text-lg" />
+                  Login with Github
+                </Button>
+              </div>
             </div>
           )}
         </div>
       </div>
-      {/* <div className="bg-black w-full h-full flex items-center justify-center">
+      <div className="bg-black w-full h-full flex items-center justify-center">
         <div className="bg-muted  w-full !bg-black flex items-center justify-center">
           <video
             autoPlay
@@ -185,7 +194,7 @@ export default function ForgotPassword() {
             width="300"
           />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

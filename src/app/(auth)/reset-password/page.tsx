@@ -190,7 +190,7 @@ export default function ResetPassword() {
           </div>
         </div>
       </div>
-      {/* <div className="bg-black w-full h-full flex items-center justify-center">
+      <div className="bg-black w-full h-full flex items-center justify-center">
         <div className="bg-muted  w-full !bg-black flex items-center justify-center">
           <video
             autoPlay
@@ -204,7 +204,7 @@ export default function ResetPassword() {
             width="300"
           />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

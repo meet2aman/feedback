@@ -17,15 +17,18 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Glitch from "@/components/sub/Glitch";
 import VerifyModal from "@/components/main/VerifyModal";
+
 export default function Dashboard() {
   /* ============= useState hooks ============ */
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
+  const [profileUrl, setProfileUrl] = useState("");
   const { user }: any = useGlobal();
   const { toast } = useToast();
   const router = useRouter();
   console.log(messages);
+  console.log(user);
 
   /* ============= Delete message function ============ */
   const handleDeleteMessage = (messageId: string) => {
@@ -50,13 +53,12 @@ export default function Dashboard() {
         userId: user._id,
       });
       setValue("acceptMessages", response.data.isAcceptingMessage);
-    } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
+    } catch (error: any) {
       toast({
         className: "py-3",
         title: "Error",
         description:
-          axiosError.response?.data.message || "Failed to Fetch message status",
+          error?.response?.data?.message || "Failed to Fetch message status",
         variant: "destructive",
       });
     } finally {
@@ -71,10 +73,12 @@ export default function Dashboard() {
       setIsLoading(true);
       setIsSwitchLoading(false);
       try {
-        const response = await axios.post<ApiResponse>("/api/get-messages", {
-          userId: user._id,
+        const response = await axios.get(`/api/get-messages`, {
+          params: {
+            userId: user._id,
+          },
         });
-        console.log("response :: ", response.data.messages);
+        console.log("response :: ", response?.data?.messages);
         setMessages(response?.data?.messages || []);
         if (refresh) {
           toast({
@@ -84,12 +88,11 @@ export default function Dashboard() {
           });
         }
       } catch (error: any) {
-        const axiosError = error as AxiosError<ApiResponse>;
         toast({
           className: "py-3",
           title: "Error",
           description:
-            axiosError.response?.data.message || "Failed to Fetch messages",
+            error?.response?.data?.message || "Failed to Fetch messages",
           variant: "destructive",
         });
       } finally {
@@ -124,8 +127,14 @@ export default function Dashboard() {
   };
 
   /* ============= generating profileUrl ============ */
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  const profileUrl = `${baseUrl}/u/${user.username}`;
+  useEffect(() => {
+    if (user.username) {
+      const baseUrl = `${window.location.protocol}//${window.location.host}`;
+      setProfileUrl(`${baseUrl}/u/${user.username}`);
+    }
+  }, [user.username]);
+  // const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  // const profileUrl = `${baseUrl}/u/${user.username}`;
 
   /* ============= Copy function ============ */
   const copyToClipboard = () => {

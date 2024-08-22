@@ -1,13 +1,13 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/options";
 import dbConnect from "@/db/dbConfig";
 import UserModel from "@/models/User";
 import mongoose from "mongoose";
-export async function POST(request: Request) {
+
+export async function GET(request: any) {
   await dbConnect();
-  // const { userId } = await request.json();
-  // console.log(userId);
-  const userId = "66b64631a9f1588f613b7eac";
+
+  console.log(request);
+  const userId = await request.params.userId;
+  console.log(userId);
 
   if (!userId) {
     return Response.json(

@@ -1,8 +1,8 @@
 import UserModel from "@/models/User";
 
 export async function POST(request: Request) {
-//   const { userId } = await request.json();
-const userId = "66b64631a9f1588f613b7eac";
+  const { userId } = await request.json();
+// const userId = "66b64631a9f1588f613b7eac";
   if (!userId) {
     return Response.json(
       {

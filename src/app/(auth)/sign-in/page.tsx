@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React from "react";
 import Image from "next/image";
-import { IoLogoGoogle } from "react-icons/io5";
+import { IoLogoGoogle, IoLogoGithub } from "react-icons/io5";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import axios from "axios";
+import { signIn } from "@/auth";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -73,6 +74,9 @@ export default function SignInPage() {
       className: "py-3",
       title: "Coming soon 😃",
     });
+  };
+  const onGithubClick = async () => {
+    await signIn("github");
   };
 
   /////  handle show password fn //////
@@ -230,13 +234,22 @@ export default function SignInPage() {
               />
             </div>
 
-            <Button
-              className="w-full bg-white/80 text-black transition-all hover:bg-white"
-              onClick={onGoogleClick}
-            >
-              <IoLogoGoogle className=" mr-2 text-lg" />
-              Login with Google
-            </Button>
+            <div className="flex justify-between items-center gap-2">
+              <Button
+                className="w-full bg-white/80 text-black transition-all hover:bg-white"
+                onClick={onGoogleClick}
+              >
+                <IoLogoGoogle className=" mr-2 text-lg" />
+                Login with Google
+              </Button>
+              <Button
+                className="w-full bg-white/80 text-black transition-all hover:bg-white"
+                onClick={onGithubClick}
+              >
+                <IoLogoGithub className=" mr-2 text-lg" />
+                Login with Github
+              </Button>
+            </div>
           </div>
         </div>
       </div>
