@@ -97,7 +97,7 @@ const SignupForm = () => {
       }
     };
     checkUsernameUniqueness();
-  }, [username]);
+  }, [isCheckingUsername, username]);
 
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     console.log(data);

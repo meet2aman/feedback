@@ -44,6 +44,8 @@ export async function POST(request: Request) {
 
     if (isCodeValid && isCodeNotExpired) {
       user.isVerified = true;
+      user.verifyCode = undefined;
+
       await user.save();
       return Response.json(
         {

@@ -24,7 +24,7 @@ export default function Home() {
       description: `${day}, ${months} ${d}, ${year} at ${hours}:${minutes} ${ampm} | ⏰   Hope We can Serve You better !
       `,
     });
-  }, []);
+  },[]);
   return (
     <>
       <main className="bg-black">

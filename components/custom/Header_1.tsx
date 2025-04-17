@@ -134,14 +134,19 @@ const Header_1 = () => {
                 <HoverCard>
                   <HoverCardTrigger asChild>
                     <HoverCardTrigger className="cursor-pointer">
-                      <Avatar>
-                        {session.avatarUrl && (
-                          <AvatarImage src={session?.avatarUrl} />
-                        )}
-                        <AvatarFallback className="text-sm text-orange-600 bg-black uppercase">
-                          {session?.username.slice(0, 2)}
-                        </AvatarFallback>
-                      </Avatar>
+                      <Link href={`/profile/${session?.username}`}>
+                        <Avatar>
+                          {session.avatarUrl && (
+                            <AvatarImage
+                              src={session?.avatarUrl}
+                              className="object-cover"
+                            />
+                          )}
+                          <AvatarFallback className="text-sm text-orange-600 bg-black uppercase">
+                            {session?.username.slice(0, 2)}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
                     </HoverCardTrigger>
                   </HoverCardTrigger>
                   <HoverCardContent className="w-80 font-semibold bg-black boder-neutral-700 text-white">

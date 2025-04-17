@@ -50,8 +50,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     signIn: async ({ user, account, profile }: any) => {
-      console.log("profile::::", profile);
-      console.log("user::::", user);
+
+
       ///  Credentials provider ///
       if (account?.provider === "credentials") return true;
 
@@ -59,6 +59,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (account?.provider === "google") {
         try {
           const { email, name, image, id } = user;
+          const sanitizedName = name.replace(/\s+/g, "");
           await dbConnect();
           const isAlreadyExist = await UserModel.findOne({
             email,
@@ -68,7 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const newUser = await UserModel.create({
               email,
               avatarUrl: image,
-              username: name,
+              username: sanitizedName,
               googleId: id,
               isVerified: true,
             });
@@ -94,6 +95,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         try {
           const { login } = profile;
           const { email, image, id } = user;
+          const sanitizedName = login.replace(/\s+/g, "");
           console.log(login);
           await dbConnect();
           const isAlreadyExist = await UserModel.findOne({ email });
@@ -102,7 +104,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const newUser = await UserModel.create({
               email,
               avatarUrl: image,
-              username: login,
+              username: sanitizedName,
               githubId: id,
               isVerified: true,
             });
