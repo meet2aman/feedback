@@ -23,7 +23,6 @@ import { EyeIcon, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { IoLogoGoogle } from "react-icons/io";
 import { IoLogoGithub } from "react-icons/io5";
-import { useAuth } from "@/context/AuthProvider";
 import { toast } from "sonner";
 import Video from "@/components/custom/Video";
 import { GithubLogin, GoogleLogin } from "@/actions";

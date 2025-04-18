@@ -1,11 +1,10 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/options";
+import { auth } from "@/auth";
 import dbConnect from "@/db/dbConfig";
 import UserModel from "@/models/User";
 
 export async function POST(request: Request) {
   await dbConnect();
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const user = session?.user;
   if (!session || !session.user) {
     return Response.json(
@@ -64,7 +63,8 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   await dbConnect();
-  const session = await getServerSession(authOptions);
+  const session = await auth();
+
   const user = session?.user;
   if (!session || !session.user) {
     return Response.json(

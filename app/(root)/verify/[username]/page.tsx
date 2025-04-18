@@ -52,7 +52,7 @@ export default function Verify({
   const searchContext = searchParams.get("context");
   console.log(searchContext);
   const username = params.username;
-  const session = useAuth();
+  const { session } = useAuth();
   const [verified, setVerified] = React.useState(false);
 
   console.log(verified);
@@ -113,7 +113,7 @@ export default function Verify({
               <CardDescription>
                 Hello <span className="font-bold">{username}</span> we have sent
                 an OTP on your Email{" "}
-                <span className="font-bold">{session?.email}</span>
+                <span className="font-bold">{session?.user?.email}</span>
               </CardDescription>
             </>
           )}

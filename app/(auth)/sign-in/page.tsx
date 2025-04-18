@@ -27,7 +27,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/context/AuthProvider";
 
 export default function SignInPage() {
-  const session = useAuth();
+  const { session } = useAuth();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [showPassword, setSetShowPassword] = React.useState(false);
@@ -117,7 +117,7 @@ export default function SignInPage() {
               Login to Feedback
             </h1>
             <div className="text-center text-md text-slate-400">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 href="/sign-up"
                 className="underline text-blue-500 hover:text-blue-700 transition-all"

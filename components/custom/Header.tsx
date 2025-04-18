@@ -26,7 +26,7 @@ const Header = () => {
   const [toggle, setToggle] = React.useState(false);
   const [isScrolling, setIsScrolling] = React.useState(false);
 
-  const session = useAuth();
+ const { session, refreshSession } = useAuth();
 
   React.useEffect(() => {
     const handleScroll = (): any => {
@@ -174,36 +174,41 @@ const Header = () => {
               >
                 <HoverCard>
                   <HoverCardTrigger asChild>
-                    <HoverCardTrigger className="cursor-pointer">
-                      <Link href={`/profile/${session?.username}`}>
-                        <Avatar>
-                          {session.avatarUrl && (
-                            <AvatarImage
-                              src={session?.avatarUrl}
-                              className="object-cover"
-                            />
-                          )}
-                          <AvatarFallback className="text-sm text-orange-600 bg-black uppercase">
-                            {session?.username.slice(0, 2)}
-                          </AvatarFallback>
-                        </Avatar>
-                      </Link>
-                    </HoverCardTrigger>
+                    <Link
+                      href={`/profile/${session.user?.username}`}
+                      className="cursor-pointer"
+                    >
+                      <Avatar>
+                        {session.user?.avatarUrl && (
+                          <AvatarImage
+                            src={session.user?.avatarUrl}
+                            className="object-cover"
+                          />
+                        )}
+                        <AvatarFallback className="text-sm text-orange-600 bg-black uppercase">
+                          {session.user?.username
+                            ? session.user.username.slice(0, 2)
+                            : "??"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Link>
                   </HoverCardTrigger>
                   <HoverCardContent className="w-80 font-semibold bg-black boder-neutral-700 text-white">
                     <div className="flex justify-between space-x-4">
                       <Avatar>
-                        <AvatarImage src={session?.avatarUrl || ""} />
+                        <AvatarImage src={session.user?.avatarUrl || ""} />
                         <AvatarFallback className="uppercase text-black">
-                          {session?.username.slice(0, 2)}
+                          {session.user?.username
+                            ? session.user?.username.slice(0, 2)
+                            : "??"}
                         </AvatarFallback>
                       </Avatar>
                       <div className="space-y-1">
                         <h4 className="text-sm font-semibold">
-                          @{session.username}
+                          @{session.user?.username}
                         </h4>
                         <p className="text-xs text-neutral-500">
-                          {session.email}
+                          {session.user?.email}
                         </p>
                         <p className="text-sm">
                           The Next-Auth Library – created and maintained by
@@ -269,14 +274,16 @@ const Header = () => {
                 <div className="w-full h-fit ">
                   <button className="px-5 bg-white py-2 text-xl text-center w-full rounded-lg text-black border border-gray-800 font-[500] capitalize flex justify-center gap-3 items-center">
                     <Avatar>
-                      {session.avatarUrl && (
-                        <AvatarImage src={session?.avatarUrl} />
+                      {session.user?.avatarUrl && (
+                        <AvatarImage src={session.user?.avatarUrl} />
                       )}
                       <AvatarFallback className="text-sm text-orange-600 bg-black uppercase">
-                        {session?.username.slice(0, 2)}
+                        {session.user?.username
+                          ? session.user?.username.slice(0, 2)
+                          : "??"}
                       </AvatarFallback>
                     </Avatar>
-                    <p className="line-clamp-1">{session.username}</p>
+                    <p className="line-clamp-1">{session.user?.username}</p>
                   </button>
                 </div>
               </>

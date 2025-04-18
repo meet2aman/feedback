@@ -20,7 +20,7 @@ export async function SignIn(data: { identifier: string; password: string }) {
 
 export async function SignOut() {
   try {
-    await signOut();
+    await signOut({ redirect: false });
     redirect("/");
   } catch (error) {
     const err = error as CredentialsSignin;

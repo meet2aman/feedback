@@ -18,10 +18,9 @@ import { messageSchema } from "@/schemas/messageSchema";
 import { Textarea } from "@/components/ui/textarea";
 import { LiaLongArrowAltRightSolid } from "react-icons/lia";
 import { toast } from "sonner";
-import { useAuth } from "@/context/AuthProvider";
+
 
 const SendMessage = ({ username }: { username: string }) => {
-  const session = useAuth();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [response, setResponse] = React.useState("");
   const form = useForm<z.infer<typeof messageSchema>>({
