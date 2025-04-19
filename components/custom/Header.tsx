@@ -26,7 +26,7 @@ const Header = () => {
   const [toggle, setToggle] = React.useState(false);
   const [isScrolling, setIsScrolling] = React.useState(false);
 
- const { session, refreshSession } = useAuth();
+  const { session, currentUserDetails, fetchCurrentUserDetails } = useAuth();
 
   React.useEffect(() => {
     const handleScroll = (): any => {
@@ -179,7 +179,7 @@ const Header = () => {
                       className="cursor-pointer"
                     >
                       <Avatar>
-                        {session.user?.avatarUrl && (
+                        {currentUserDetails?.avatarUrl && (
                           <AvatarImage
                             src={session.user?.avatarUrl}
                             className="object-cover"
@@ -196,7 +196,9 @@ const Header = () => {
                   <HoverCardContent className="w-80 font-semibold bg-black boder-neutral-700 text-white">
                     <div className="flex justify-between space-x-4">
                       <Avatar>
-                        <AvatarImage src={session.user?.avatarUrl || ""} />
+                        <AvatarImage
+                          src={currentUserDetails?.avatarUrl || ""}
+                        />
                         <AvatarFallback className="uppercase text-black">
                           {session.user?.username
                             ? session.user?.username.slice(0, 2)
@@ -274,8 +276,8 @@ const Header = () => {
                 <div className="w-full h-fit ">
                   <button className="px-5 bg-white py-2 text-xl text-center w-full rounded-lg text-black border border-gray-800 font-[500] capitalize flex justify-center gap-3 items-center">
                     <Avatar>
-                      {session.user?.avatarUrl && (
-                        <AvatarImage src={session.user?.avatarUrl} />
+                      {currentUserDetails?.avatarUrl && (
+                        <AvatarImage src={currentUserDetails?.avatarUrl} />
                       )}
                       <AvatarFallback className="text-sm text-orange-600 bg-black uppercase">
                         {session.user?.username

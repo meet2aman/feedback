@@ -24,7 +24,8 @@ const ProfilePage = ({
     username: string;
   };
 }) => {
-  const { session, refreshSession } = useAuth();
+  const { session, currentUserDetails, fetchCurrentUserDetails } = useAuth();
+
   const [progress, setProgress] = useState(0);
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
@@ -121,7 +122,7 @@ const ProfilePage = ({
         });
         setUploading(false);
         setPreview(null);
-        await refreshSession();
+        fetchCurrentUserDetails();
       } else {
         toast.error("Failed to update profile", {
           id: toastId,
@@ -170,12 +171,12 @@ const ProfilePage = ({
   return (
     <div className=" text-white px-10 lg:px-20 py-20 lg:grid grid-cols-6 flex flex-col justify-center max-lg:items-center gap-20 w-full lg:gap-12">
       <div className="col-span-2 lg:w-[300px] lg:h-[300px]">
-        {session?.user?.avatarUrl && (
+        {currentUserDetails?.avatarUrl && (
           <div className="rounded-full lg:rounded-xl bg-neutral-200 p-2 shadow-lg shadow-neutral-700">
             <div className="rounded-full lg:rounded-none overflow-hidden lg:w-[300px] lg:h-[300px] grid grid-cols-5 justify-between items-center lg:p-2 lg:flex flex-col lg:justify-center">
               <Image
                 className="object-cover rounded-full col-span-1 lg:w-[200px] lg:h-[200px]"
-                src={session?.user?.avatarUrl}
+                src={currentUserDetails?.avatarUrl}
                 alt="Profile Image"
                 width={50}
                 height={50}

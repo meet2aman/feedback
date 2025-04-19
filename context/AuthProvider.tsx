@@ -1,19 +1,23 @@
 "use client";
 
 import axios from "axios";
-import { SessionType } from "../types/next-auth";
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { Session } from "next-auth";
+import { User } from "@/models/User";
 
 type AuthContextType = {
   session: Session | null;
-  refreshSession: () => Promise<void>;
+  currentUserDetails: User | null;
+  fetchCurrentUserDetails: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   session: null,
-  refreshSession: async () => {},
+  currentUserDetails: null,
+  fetchCurrentUserDetails: async () => {},
 });
+
 function AuthProvider({
   children,
   initialSession,
@@ -21,29 +25,36 @@ function AuthProvider({
   children: React.ReactNode;
   initialSession: Session | null;
 }) {
+  // const nextsession = await auth();
   const [session, setSession] = useState<Session | null>(initialSession);
+  const [currentUserDetails, setCurrentUserDetails] = useState<User | null>(
+    null
+  );
 
-  const refreshSession = async () => {
-    console.log("refreshedCalled");
+  const fetchCurrentUserDetails = async () => {
+    console.log("fetched Called ---------");
     try {
       const res = await axios.get("/api/me");
-      console.log("refreshed session:", res.data);
-
-      setSession((prev) => ({
-        ...prev!,
-        user: {
-          ...prev!.user,
-          ...res.data.user,
-        },
-      }));
+      console.log("response------", res);
+      setCurrentUserDetails(res.data.data); // assuming { user: {...} }
     } catch (err) {
-      console.error("Failed to refresh session:", err);
-      setSession(null);
+      console.error("Failed to fetch current user details:", err);
+      setCurrentUserDetails(null);
     }
   };
 
+  useEffect(() => {
+    fetchCurrentUserDetails();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ session, refreshSession }}>
+    <AuthContext.Provider
+      value={{
+        session,
+        currentUserDetails,
+        fetchCurrentUserDetails,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -25,13 +25,12 @@ const Header_1 = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [toggle, setToggle] = React.useState(false);
-  const { session, refreshSession } = useAuth();
+  const { session, currentUserDetails } = useAuth();
   console.log(session, "session from header_1");
 
   const handleSignOut = async () => {
     try {
       await SignOut();
-      await refreshSession();
       toast("You have been logged out !", {});
       router.refresh();
     } catch (error) {
@@ -140,9 +139,9 @@ const Header_1 = () => {
                       className="cursor-pointer"
                     >
                       <Avatar>
-                        {session.user?.avatarUrl && (
+                        {currentUserDetails?.avatarUrl && (
                           <AvatarImage
-                            src={session.user.avatarUrl}
+                            src={currentUserDetails.avatarUrl}
                             className="object-cover"
                           />
                         )}
@@ -157,7 +156,9 @@ const Header_1 = () => {
                   <HoverCardContent className="w-80 font-semibold bg-black boder-neutral-700 text-white">
                     <div className="flex justify-between space-x-4">
                       <Avatar>
-                        <AvatarImage src={session.user?.avatarUrl || ""} />
+                        <AvatarImage
+                          src={currentUserDetails?.avatarUrl || ""}
+                        />
                         <AvatarFallback className="uppercase text-black">
                           {session.user?.username
                             ? session.user?.username.slice(0, 2)

@@ -3,33 +3,28 @@ import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import UserModel from "@/models/User";
 import dbConnect from "@/db/dbConfig";
-import Session, { User } from "next-auth";
+import { auth } from "@/auth";
 
 export async function GET(req: Request) {
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const session = await auth();
 
-  console.log(token);
-
-  if (!token?.email) {
+  if (!session) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
   await dbConnect();
-  const user = (await UserModel.findOne({ email: token.email })) as User;
+  const userIsExisted = await UserModel.findById(session.user._id).select(
+    "_id username email avatarUrl googleId githubId"
+  );
   console.log("usser from /me");
 
-  if (!user) {
+  console.log("userIsExisted", userIsExisted);
+
+  if (!userIsExisted) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-
-  return NextResponse.json({
-    user: {
-      _id: user._id.toString(),
-      email: user.email,
-      username: user.username,
-      avatarUrl: user.avatarUrl,
-      isVerified: user.isVerified,
-      isAcceptingMessages: user.isAcceptingMessages,
-    },
-  });
+  return NextResponse.json(
+    { messgae: "User Details Fetched Successfully", data: userIsExisted },
+    { status: 200 }
+  );
 }
