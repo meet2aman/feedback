@@ -26,7 +26,7 @@ const Header = () => {
   const [toggle, setToggle] = React.useState(false);
   const [isScrolling, setIsScrolling] = React.useState(false);
 
-  const { session, currentUserDetails, fetchCurrentUserDetails } = useAuth();
+  const { session, currentUserDetails } = useAuth();
 
   React.useEffect(() => {
     const handleScroll = (): any => {
@@ -181,7 +181,7 @@ const Header = () => {
                       <Avatar>
                         {currentUserDetails?.avatarUrl && (
                           <AvatarImage
-                            src={session.user?.avatarUrl}
+                            src={currentUserDetails?.avatarUrl}
                             className="object-cover"
                           />
                         )}
@@ -196,9 +196,7 @@ const Header = () => {
                   <HoverCardContent className="w-80 font-semibold bg-black boder-neutral-700 text-white">
                     <div className="flex justify-between space-x-4">
                       <Avatar>
-                        <AvatarImage
-                          src={currentUserDetails?.avatarUrl || ""}
-                        />
+                        <AvatarImage src={currentUserDetails?.avatarUrl} />
                         <AvatarFallback className="uppercase text-black">
                           {session.user?.username
                             ? session.user?.username.slice(0, 2)

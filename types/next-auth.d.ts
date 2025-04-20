@@ -51,7 +51,7 @@ declare module "next-auth" {
       email: string;
       username: string;
       isVerified: boolean;
-      isAcceptingMessages: boolean;
+      isAcceptingMessages?: boolean;
       avatarUrl?: string;
       name?: string;
       image?: string;
@@ -63,7 +63,7 @@ declare module "next-auth" {
     email: string;
     username: string;
     isVerified: boolean;
-    isAcceptingMessages: boolean;
+    isAcceptingMessages?: boolean;
     avatarUrl?: string;
     name?: string;
     image?: string;
@@ -75,7 +75,7 @@ declare module "next-auth" {
     username: string;
     avatarUrl?: string;
     isVerified: boolean;
-    isAcceptingMessages: boolean;
+    isAcceptingMessages?: boolean;
     name?: string;
     image?: string;
   }
@@ -87,7 +87,7 @@ export type SessionType = {
   email: string;
   username: string;
   isVerified: boolean;
-  isAcceptingMessages: boolean;
+  isAcceptingMessages?: boolean;
   avatarUrl?: string;
   name?: string;
   image?: string;

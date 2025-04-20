@@ -1,6 +1,6 @@
 "use client";
 import { Loader2 } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -19,8 +19,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { LiaLongArrowAltRightSolid } from "react-icons/lia";
 import { toast } from "sonner";
 
-
-const SendMessage = ({ username }: { username: string }) => {
+const SendMessage = ({
+  username,
+  message,
+}: {
+  username: string;
+  message: string;
+}) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [response, setResponse] = React.useState("");
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -30,6 +35,12 @@ const SendMessage = ({ username }: { username: string }) => {
     },
   });
 
+  useEffect(() => {
+    if (message) {
+      form.setValue("content", message);
+    }
+  }, [message, form]);
+
   const onSubmit = async (data: z.infer<typeof messageSchema>) => {
     setIsSubmitting(true);
     try {
@@ -37,7 +48,7 @@ const SendMessage = ({ username }: { username: string }) => {
         username: username,
         content: data.content,
       });
-      console.log("response", response);
+
       setResponse(response.data.message);
 
       toast(`${response.data.message}`);
@@ -54,7 +65,7 @@ const SendMessage = ({ username }: { username: string }) => {
   };
 
   return (
-    <div className="max-w-6xl rounded-lg p-4 mt-28">
+    <div className="max-w-6xl rounded-lg p-4 mt-16">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
           <div className="grid gap-2">

@@ -20,19 +20,20 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { dateConverter } from "@/utils/cn";
 import { SessionType } from "@/types/next-auth";
 import { toast } from "sonner";
+import { Session } from "next-auth";
 
 type MessageCardProps = {
-  user: SessionType;
+  id: string;
   message: Message;
   onMessageDelete: (messageId: string) => void;
 };
 
-const MessageCard = ({ user, message, onMessageDelete }: MessageCardProps) => {
+const MessageCard = ({ id, message, onMessageDelete }: MessageCardProps) => {
   const handleDeleteConfirm = async () => {
     const response = await axios.delete<ApiResponse>(`/api/delete-message`, {
       data: {
         messageId: message._id,
-        userId: user._id,
+        userId: id,
       },
     });
     toast(response.data.message);

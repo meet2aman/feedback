@@ -6,11 +6,8 @@ import { auth } from "@/auth";
 export async function GET(request: any) {
   await dbConnect();
 
-  console.log(request);
   // const userId = await request.params.userId;
   const session = await auth();
-
-  console.log(session?.user.username);
 
   if (!session?.user.username) {
     return Response.json(

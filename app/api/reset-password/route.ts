@@ -14,9 +14,9 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const { password, token } = await request.json();
     const decodedToken = decodeURIComponent(token);
     const user = await UserModel.findOne({ forgotPasswordToken: decodedToken });
-    console.log(token);
-    console.log(user);
-    console.log(decodedToken);
+
+
+
     if (!user) {
       console.log(`no user found`);
       return NextResponse.json(

@@ -26,7 +26,6 @@ const Header_1 = () => {
   const pathname = usePathname();
   const [toggle, setToggle] = React.useState(false);
   const { session, currentUserDetails } = useAuth();
-  console.log(session, "session from header_1");
 
   const handleSignOut = async () => {
     try {
@@ -129,7 +128,7 @@ const Header_1 = () => {
           {session ? (
             <>
               <div
-                // href={`/u/${session?.username}`}
+                // href={`/u/${session?.user.username}`}
                 className="border-2 rounded-full bg-white p-[0.3px] "
               >
                 <HoverCard>
@@ -157,7 +156,7 @@ const Header_1 = () => {
                     <div className="flex justify-between space-x-4">
                       <Avatar>
                         <AvatarImage
-                          src={currentUserDetails?.avatarUrl || ""}
+                          src={currentUserDetails?.avatarUrl}
                         />
                         <AvatarFallback className="uppercase text-black">
                           {session.user?.username

@@ -17,8 +17,10 @@ import { useForm } from "react-hook-form";
 import Glitch from "@/components/sub/Glitch";
 import VerifyModal from "@/components/main/VerifyModal";
 import { SessionType } from "@/types/next-auth";
+import { useAuth } from "@/context/AuthProvider";
 
-const DashboardUserDetails = ({ user }: { user: SessionType }) => {
+const DashboardUserDetails = () => {
+  const { session, currentUserDetails, fetchCurrentUserDetails } = useAuth();
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +30,9 @@ const DashboardUserDetails = ({ user }: { user: SessionType }) => {
   /* ============= zod implimentation ============ */
   const form = useForm({
     resolver: zodResolver(acceptMessageSchema),
+    defaultValues: {
+      acceptMessages: false, // default fallback
+    },
   });
 
   const { register, watch, setValue } = form;
@@ -37,10 +42,14 @@ const DashboardUserDetails = ({ user }: { user: SessionType }) => {
   const handleSwitchChange = async () => {
     try {
       const response = await axios.post<ApiResponse>("/api/accept-messages", {
-        acceptMessages: !acceptMessages,
-        userId: user._id,
+        acceptMessages: !currentUserDetails?.isAcceptingMessage,
+        userId: session?.user._id,
       });
-      setValue("acceptMessages", !acceptMessages);
+      fetchCurrentUserDetails();
+      setValue(
+        "acceptMessages",
+        currentUserDetails?.isAcceptingMessage ?? false
+      );
       toast(response.data.message);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
@@ -49,19 +58,6 @@ const DashboardUserDetails = ({ user }: { user: SessionType }) => {
   };
 
   /* ============= fetch status of accepting Message function ============ */
-  const fetchAcceptMessages = useCallback(async () => {
-    setIsSwitchLoading(true);
-    try {
-      const response = await axios.post(`/api/fetch-accept-message`, {
-        userId: user._id,
-      });
-      setValue("acceptMessages", response.data.isAcceptingMessage);
-    } catch (error: any) {
-      toast(error?.response?.data?.message || "Failed to Fetch message status");
-    } finally {
-      setIsSwitchLoading(false);
-    }
-  }, [setValue]);
 
   /* ============= Fetch message function ============ */
 
@@ -91,12 +87,13 @@ const DashboardUserDetails = ({ user }: { user: SessionType }) => {
   );
 
   /* ============= generating profileUrl ============ */
+
   useEffect(() => {
-    if (user.username) {
+    if (session?.user.username) {
       const baseUrl = `${window.location.protocol}//${window.location.host}`;
-      setProfileUrl(`${baseUrl}/u/${user.username}`);
+      setProfileUrl(`${baseUrl}/u/${session?.user.username}`);
     }
-  }, [user.username]);
+  }, [session?.user.username]);
 
   /* ============= Delete message function ============ */
   const handleDeleteMessage = (messageId: string) => {
@@ -108,10 +105,9 @@ const DashboardUserDetails = ({ user }: { user: SessionType }) => {
   /* ============= useEffect Hook ============ */
 
   useEffect(() => {
-    if (!user.username) return;
-    fetchAcceptMessages();
+    if (!session) return;
     fetchMessages();
-  }, [setValue, fetchAcceptMessages, user]);
+  }, [fetchMessages, session]);
 
   /* ============= Copy function ============ */
   const copyToClipboard = () => {
@@ -124,10 +120,10 @@ const DashboardUserDetails = ({ user }: { user: SessionType }) => {
     <>
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold mb-4 capitalize">
-          {user.username}&apos;s Dashboard
+          {session?.user?.name}&apos;s Dashboard
         </h1>
-        {user?.isVerified === false ? (
-          <VerifyModal userName={user.username} />
+        {currentUserDetails?.isVerified === false ? (
+          <VerifyModal userName={session?.user.username} />
         ) : (
           <div className="relative">
             <Button onClick={() => {}} disabled>
@@ -163,12 +159,13 @@ const DashboardUserDetails = ({ user }: { user: SessionType }) => {
       <div className="mb-4">
         <Switch
           {...register("acceptMessages")}
-          checked={acceptMessages}
+          checked={currentUserDetails?.isAcceptingMessage}
           onCheckedChange={handleSwitchChange}
           disabled={isSwitchLoading}
         />
         <span className="ml-2">
-          Accept Messages: {acceptMessages ? "On" : "Off"}
+          Accept Messages:{" "}
+          {currentUserDetails?.isAcceptingMessage ? "On" : "Off"}
         </span>
       </div>
       <Separator />
@@ -193,7 +190,7 @@ const DashboardUserDetails = ({ user }: { user: SessionType }) => {
               key={index}
               message={message}
               onMessageDelete={handleDeleteMessage}
-              user={user}
+              id={session?.user?._id || ""}
             />
           ))
         ) : (

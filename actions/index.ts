@@ -33,7 +33,7 @@ export async function GithubLogin() {
 }
 
 export async function GoogleLogin() {
-  await signIn("google");
+  const res = await signIn("google");
 }
 
 export async function AppleLogin() {

@@ -4,8 +4,6 @@ import UserModel from "@/models/User";
 
 export async function DELETE(request: Request) {
   const { userId, messageId } = await request.json();
-
-  console.log(messageId, userId);
   await dbConnect();
 
   if (!messageId && !userId) {

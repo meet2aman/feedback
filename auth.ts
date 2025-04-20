@@ -50,8 +50,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     signIn: async ({ user, account, profile }: any) => {
-
-
       ///  Credentials provider ///
       if (account?.provider === "credentials") return true;
 
@@ -96,7 +94,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const { login } = profile;
           const { email, image, id } = user;
           const sanitizedName = login.replace(/\s+/g, "");
-          console.log(login);
+
           await dbConnect();
           const isAlreadyExist = await UserModel.findOne({ email });
 
@@ -136,7 +134,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token._id = user?._id?.toString();
         token.isVerified = user.isVerified;
-        token.isAcceptingMessages = user.isAcceptingMessage;
         token.username = user.username;
         token.avatarUrl = user.avatarUrl;
       }
@@ -146,7 +143,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token) {
         session.user._id = token._id;
         session.user.isVerified = token.isVerified;
-        session.user.isAcceptingMessages = token.isAcceptingMessages;
         session.user.username = token.username;
         session.user.avatarUrl = token.avatarUrl;
       }

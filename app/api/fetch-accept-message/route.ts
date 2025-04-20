@@ -1,9 +1,10 @@
+import { auth } from "@/auth";
 import UserModel from "@/models/User";
 
 export async function POST(request: Request) {
-  const { userId } = await request.json();
-// const userId = "66b64631a9f1588f613b7eac";
-  if (!userId) {
+  const session = await auth();
+
+  if (!session) {
     return Response.json(
       {
         success: false,
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
     );
   }
   try {
-    const foundUser = await UserModel.findById(userId);
+    const foundUser = await UserModel.findById(session.user._id);
     if (!foundUser) {
       return Response.json(
         {

@@ -1,12 +1,14 @@
+import { auth } from "@/auth";
 import dbConnect from "@/db/dbConfig";
 import UserModel from "@/models/User";
 
 export async function POST(request: Request) {
+  const session = await auth();
   await dbConnect();
   const reqBody = await request.json();
-  console.log(reqBody);
-  const { acceptMessages, userId } = reqBody;
-  if (!userId) {
+
+  const { acceptMessages } = reqBody;
+  if (!session) {
     return Response.json(
       {
         success: false,
@@ -20,14 +22,13 @@ export async function POST(request: Request) {
 
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(
-      userId,
+      session.user._id,
       {
         isAcceptingMessage: acceptMessages,
       },
       { new: true }
     );
     if (!updatedUser) {
-      console.log("No user found");
       return Response.json(
         {
           success: false,

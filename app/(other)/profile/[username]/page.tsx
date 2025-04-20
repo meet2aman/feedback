@@ -66,7 +66,7 @@ const ProfilePage = ({
   };
 
   const handleClearPreview = () => {
-    console.log("running");
+
     setPreview(null);
     setFiles([]);
   };
@@ -78,7 +78,7 @@ const ProfilePage = ({
     const toastId = toast.loading("Uploading...");
 
     const file = files[0];
-    console.log(file);
+
 
     let authParams;
 
@@ -109,12 +109,11 @@ const ProfilePage = ({
 
         abortSignal: abortController.signal,
       });
-      console.log("Upload response:", uploadResponse);
+
       const response = await axios.patch("/api/update-profile", {
         avatarUrl: uploadResponse.url,
       });
 
-      console.log("Response", response);
 
       if (response.status === 200) {
         toast.success("Profile updated successfully", {

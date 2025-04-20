@@ -70,7 +70,6 @@ const SignInPage = () => {
         });
       }
     } catch (error: any) {
-      console.log("Error from catch block::", error);
       toast.error(String(error), {
         id: toastid,
       });
@@ -109,7 +108,7 @@ const SignInPage = () => {
               <CardHeader>
                 <CardTitle>Account</CardTitle>
                 <CardDescription>
-                  Make changes to your account here. Click save when you're
+                  Make changes to your account here. Click save when you&apos;re
                   done.
                 </CardDescription>
               </CardHeader>

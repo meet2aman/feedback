@@ -14,11 +14,8 @@ export async function GET(req: Request) {
 
   await dbConnect();
   const userIsExisted = await UserModel.findById(session.user._id).select(
-    "_id username email avatarUrl googleId githubId"
+    "_id username email avatarUrl googleId githubId isAcceptingMessage"
   );
-  console.log("usser from /me");
-
-  console.log("userIsExisted", userIsExisted);
 
   if (!userIsExisted) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });

@@ -50,12 +50,12 @@ export default function Verify({
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchContext = searchParams.get("context");
-  console.log(searchContext);
+
   const username = params.username;
   const { session } = useAuth();
   const [verified, setVerified] = React.useState(false);
 
-  console.log(verified);
+
   const form = useForm<z.infer<typeof verifySchema>>({
     resolver: zodResolver(verifySchema),
     defaultValues: {
@@ -65,7 +65,7 @@ export default function Verify({
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      console.log(data);
+
       const response = await axios.post("/api/verify-code", {
         code: data.pin,
         username: username,

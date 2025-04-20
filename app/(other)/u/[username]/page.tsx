@@ -2,6 +2,7 @@
 import SendMessage from "@/components/custom/SendMessage";
 import SuggestMessage from "@/components/custom/SuggestMessage";
 import { User } from "lucide-react";
+import { useState } from "react";
 
 const MessagePage = ({
   params,
@@ -10,6 +11,12 @@ const MessagePage = ({
     username: string;
   };
 }) => {
+  const [value, setValue] = useState("");
+  const handleMessage = (q: string) => {
+    console.log("q", q);
+    setValue(q);
+  };
+
   return (
     <main className="flex justify-center items-start gap-5 lg:px-8">
       <div className=" hidden lg:flex lg:fixed top-0 left-0 items-center justify-center h-screen border-r-[0.7px] border-neutral-800 w-[10%]">
@@ -36,9 +43,9 @@ const MessagePage = ({
               </button>
             </div>
           </div>
-          <SendMessage username={params?.username} />
+          <SendMessage username={params?.username} message={value} />
         </div>
-        <SuggestMessage />
+        <SuggestMessage setMessage={handleMessage} />
       </div>
     </main>
   );

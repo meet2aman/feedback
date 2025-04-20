@@ -44,12 +44,10 @@ const UserSchema: Schema<User> = new Schema(
     googleId: {
       type: String,
       default: null,
-      unique: true,
     },
     githubId: {
       type: String,
       default: null,
-      unique: true,
     },
     avatarUrl: {
       type: String,

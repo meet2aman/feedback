@@ -44,10 +44,8 @@ const SignupForm = () => {
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setSetShowPassword] = useState(false);
-  const debounced = useDebounceCallback(setUsername, 500);
-  const [signupStatus, setSignupStatus] = React.useState<
-    "success" | "error" | null
-  >(null);
+  // const debounced = useDebounceCallback(setUsername, 500);
+  
 
   useEffect(() => {
     const checkUsernameUniqueness = async () => {
@@ -99,19 +97,14 @@ const SignupForm = () => {
   }, [isCheckingUsername, username]);
 
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
-    console.log(data);
+
     setIsSubmitting(true);
-    // if (user.username && user.password) {
-    //   setSignupStatus("success");
-    // } else {
-    //   setSignupStatus("error");
-    // }
+  
     try {
       setLoading(true);
       const response = await axios.post("/api/sign-up", data);
       toast(`${response.data.message}`);
       toast("Verification email sent successfully");
-      console.log("Signup success", response.data);
 
       setTimeout(() => {
         router.replace(`/verify/${username}?context=signup`);
@@ -155,23 +148,11 @@ const SignupForm = () => {
                       onChange={(e) => {
                         field.onChange(e);
 
-                        debounced(e.target.value);
+                        // debounced(e.target.value);
                       }}
                     />
                   </FormControl>
-                  {/* {isCheckingUsername && (
-                            <Loader2 className="animate-spin text-white" />
-                          )}
-                          <p
-                            className={`text-sm ${
-                              usernameMessage === "Username is unique"
-                                ? "text-green-500"
-                                : "text-red-500"
-                            } `}
-                          >
-                            test {usernameMessage}
-                          </p> */}
-
+                 
                   <FormMessage />
                 </FormItem>
               )}

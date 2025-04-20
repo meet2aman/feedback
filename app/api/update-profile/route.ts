@@ -19,7 +19,6 @@ export async function PATCH(req: Request) {
   }
 
   const { avatarUrl } = await req.json();
-  console.log(avatarUrl);
 
   try {
     await dbConnect();

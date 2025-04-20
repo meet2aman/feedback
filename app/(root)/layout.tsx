@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 };
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
-  console.log(session);
   return (
     <main>
       <Header />
