@@ -33,7 +33,7 @@ import { z } from "zod";
 import { Label } from "../ui/label";
 
 const formSchema = z.object({
-  identifier: z.string(),
+  identifier: z.string().toLowerCase(),
   password: z.string(),
 });
 

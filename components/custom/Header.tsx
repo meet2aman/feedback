@@ -60,7 +60,7 @@ const Header = () => {
     try {
       await SignOut();
       toast("You have been logged out.");
-      router.replace("/");
+      router.push("/");
       router.refresh();
     } catch (error) {
       const err = error as CredentialsSignin;

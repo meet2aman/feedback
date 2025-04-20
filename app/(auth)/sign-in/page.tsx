@@ -59,6 +59,7 @@ export default function SignInPage() {
           id: toastid,
         });
         form.reset();
+        router.push("/dashboard");
         router.refresh();
       } else {
         toast.error(String(error), {
@@ -97,7 +98,7 @@ export default function SignInPage() {
   };
 
   if (session) {
-    router.replace("/dashboard");
+    router.push("/dashboard");
   }
 
   return (

@@ -44,8 +44,7 @@ const SignupForm = () => {
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setSetShowPassword] = useState(false);
-  // const debounced = useDebounceCallback(setUsername, 500);
-  
+  const debounced = useDebounceCallback(setUsername, 500);
 
   useEffect(() => {
     const checkUsernameUniqueness = async () => {
@@ -97,9 +96,8 @@ const SignupForm = () => {
   }, [isCheckingUsername, username]);
 
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
-
     setIsSubmitting(true);
-  
+
     try {
       setLoading(true);
       const response = await axios.post("/api/sign-up", data);
@@ -148,11 +146,11 @@ const SignupForm = () => {
                       onChange={(e) => {
                         field.onChange(e);
 
-                        // debounced(e.target.value);
+                        debounced(e.target.value);
                       }}
                     />
                   </FormControl>
-                 
+
                   <FormMessage />
                 </FormItem>
               )}

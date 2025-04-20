@@ -16,7 +16,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Glitch from "@/components/sub/Glitch";
 import VerifyModal from "@/components/main/VerifyModal";
-import { SessionType } from "@/types/next-auth";
 import { useAuth } from "@/context/AuthProvider";
 
 const DashboardUserDetails = () => {
@@ -116,11 +115,12 @@ const DashboardUserDetails = () => {
       description: "Profile URL has been copied successfully",
     });
   };
+
   return (
     <>
       <div className="flex justify-between">
         <h1 className="text-4xl font-bold mb-4 capitalize">
-          {session?.user?.name}&apos;s Dashboard
+          {session?.user?.username}&apos;s Dashboard
         </h1>
         {currentUserDetails?.isVerified === false ? (
           <VerifyModal userName={session?.user.username} />

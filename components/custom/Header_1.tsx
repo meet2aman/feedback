@@ -31,6 +31,7 @@ const Header_1 = () => {
     try {
       await SignOut();
       toast("You have been logged out !", {});
+      router.push("/");
       router.refresh();
     } catch (error) {
       const err = error as CredentialsSignin;
@@ -155,9 +156,7 @@ const Header_1 = () => {
                   <HoverCardContent className="w-80 font-semibold bg-black boder-neutral-700 text-white">
                     <div className="flex justify-between space-x-4">
                       <Avatar>
-                        <AvatarImage
-                          src={currentUserDetails?.avatarUrl}
-                        />
+                        <AvatarImage src={currentUserDetails?.avatarUrl} />
                         <AvatarFallback className="uppercase text-black">
                           {session.user?.username
                             ? session.user?.username.slice(0, 2)
